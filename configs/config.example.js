@@ -7,9 +7,10 @@ config.irc = {
 config.bot = {
 	nick: 'exampleb0t',
 	name: 'b0tbecue-dev',
+	prefix: '@',
 	password: '',
 	owners: {
 		'example': '~example@127.0.0.1'
 	}
 };
-module.exports = config;
+exports.config = config;
