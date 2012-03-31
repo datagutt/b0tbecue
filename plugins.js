@@ -6,7 +6,6 @@ Plugins.prototype = {
 	load: function(plugins){
 		if(typeof plugins == 'array'){
 			[].forEach(plugins, function(plugin){
-				console.log()
 				this.load(plugin);
 			});
 		}else{
