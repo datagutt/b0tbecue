@@ -45,44 +45,62 @@ IRC.prototype = {
 		this.socket.write(action + ' ' + message + '\r\n');
 	},
 	parse: function(data, self){
+		// IRC seems to put a : infront of lines, remove that
 		var data = data.toString().replace(/^:/, '');
 		var response = data.split('\n'), 
 			rawResponse, 
 			hostname, 
 			message, 
 			event;
-        if(data.match('^PING')){
-        	console.log('[PING] Receieved');
-        	this.handlePing(response);
-        }else{
-        	var passedVars = {};
-        	for (i = response.length; i--;){
-                var rawResponse = response[i].split(' ');
-                var hostname = rawResponse[0].split('!');
-				if(hostname[0] && hostname[1]){
-                	passedVars['user'] = hostname[0];
-                	passedVars['hostname'] = hostname[1];
-                }
-                if(rawResponse[1]){
-					passedVars['event'] = event = rawResponse[1];
-                }
-                if(event == 'PRIVMSG'){
-					message = rawResponse.slice(3);
-					if(message[0][0] == ':'){
-						message[0] = message[0].replace(':', '');
+		// Pings should later on be handled in fireEvent
+		if(data.match('^PING')){
+			console.log('[PING] Receieved');
+			this.handlePing(response);
+		}else{
+			var passedVars = {};
+			for (i = response.length; i--;){
+					// Turn the response into an array
+					var rawResponse = response[i].split(' ');
+					// Get host and user using regex
+					var hostmask = /(.*)!((.*)@(.*))/.exec(rawResponse[0]);
+					if(hostmask && hostmask[1] && hostmask[2]){
+						passedVars['user'] = hostmask[1];
+						passedVars['host'] = hostmask[2];
 					}
-					first = message[0].trim();
-					message = message.join(' ').trim();
-					if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
-						passedVars['command'] = first.replace(self.bot.config.prefix, '');
+					// Get event
+					if(rawResponse[1]){
+						passedVars['event'] = event = rawResponse[1];
+					}
+					// Get channel
+					if(rawResponse[2]){
+						var channel = rawResponse[2].replace(/^:/, '').trim();
+						// If it has # infront of it, it gotta be a channel
+						if(/(#(.*))/.exec(channel)){
+							passedVars['channel'] = channel;
+						}
+					}
+					if(event == 'PRIVMSG'){
+						// Remove the 3 first parts because they dont 
+						// contain a message, then join the values left
+						// and remove : infront to get a string
+						message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+						// get the first part of a message
+						first = message.split(' ')[0];
+						if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
+							// Remove the prefix from command
+							passedVars['command'] = first.replace(self.bot.config.prefix, '');
+							// Slice using the prefix length+command length
+							// so the command doesnt appear in the arguments list
+							passedVars['arguments'] = message.slice(self.bot.config.prefix.length+first.length);
 					}
 					passedVars['message'] = message;
-                }
-                if(event){
-                	self.fireEvent(event, passedVars);
-                }
-        	}
-        }
+				}
+				console.log(passedVars);
+				if(event){
+					self.fireEvent(event, passedVars);
+				}
+			}
+		}
 	},
 	handlePing: function(data){
 		var server = data[0].split(":");
@@ -109,26 +127,31 @@ IRC.prototype = {
 	},
 	checkCommand: function(passedVars){
 		// Remove this, add plugins instead
+		var channel = passedVars['channel'];
 		switch(passedVars['command']){
 			case 'help':
-				this.message('#kickfight', passedVars["user"] + ': You need help, dont you?');
+				this.message(channel, passedVars['user'] + ': You need help, dont you?');
 			break;
 			case 'ping':
-				this.message('#kickfight', 'Version: '+this.bot.VERSION);
+				this.message(channel, 'Version: '+this.bot.VERSION);
 			break;
 			case 'eval':
-				vm = require('vm');
-				console.log(passedVars);
 				code = passedVars['message'].replace(this.bot.config.prefix+"eval", "");
-				if(passedVars['user'] == 'datagutt' && passedVars['hostname'] == '~datagutt@unaffiliated/datagutt'){
+				if(this.isOwner(passedVars['user'], passedVars['host'])){
 					result = evaluate.apply(this, [code]);
 					if(result){
-						this.message('#kickfight', result);
+						this.message(channel, result);
 					}
 				}else{
-					this.message('#kickfight', 'Your not my owner!');
+					this.message(channel, 'Your not my owner!');
 				}
 			break;
+		}
+	},
+	isOwner: function(user, host){
+		var config = this.bot.config;
+		for(owner in config.owners){
+			return user == owner && config.owners[owner] == host;
 		}
 	},
 	/* Channel methods */
@@ -138,8 +161,8 @@ IRC.prototype = {
 	part: function(channel){
 		this.part('JOIN', channel);
 	},
-	message: function(channel, message){
-		this.send('PRIVMSG', channel + ' :' + message);
+	message: function(target, message){
+		this.send('PRIVMSG', target + ' :' + message);
 	}
 };
 module.exports.IRC = IRC;
