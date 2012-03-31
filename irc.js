@@ -1,14 +1,8 @@
 var util = require('util');
 var net = require('net');
-function evaluate(code){
-	try{
-		eval('(' + code + ')\n');
-	}catch(e){
-		this.message('#kickfight', e);
-	}
-}
-var IRC = function(bot){
+var IRC = function(bot, plugins){
 	this.bot = bot;
+	this.plugins = plugins;
 };
 IRC.prototype = {
 	socket: new net.Socket(),
@@ -91,11 +85,12 @@ IRC.prototype = {
 							passedVars['command'] = first.replace(self.bot.config.prefix, '');
 							// Slice using the prefix length+command length
 							// so the command doesnt appear in the arguments list
-							passedVars['arguments'] = message.slice(self.bot.config.prefix.length+first.length);
+							// then split it so it becomes an array
+							passedVars['arguments'] = message.slice(self.bot.config.prefix.length+first.length).split(' ');
+					}else{
+						passedVars['message'] = message;
 					}
-					passedVars['message'] = message;
 				}
-				console.log(passedVars);
 				if(event){
 					self.fireEvent(event, passedVars);
 				}
@@ -110,49 +105,25 @@ IRC.prototype = {
 	},
 	fireEvent: function(event, passedVars){
 		switch(event){
-			case 'PING':
-				// PING is handled elsewhere
-			break;
 			case 'PRIVMSG':
 				if(passedVars['command']){
 					event = 'command';
-					// temp
-					this.checkCommand(passedVars);
 				}else if(passedVars['message']){
-					console.log('[MSG] ['+passedVars['user']+']'+passedVars['message']);
 					event = 'message';
+					console.log('[MSG] ['+passedVars['channel']+'] '+passedVars['user']+'] '+passedVars['message']);
 				}
 			break;
 		}
-	},
-	checkCommand: function(passedVars){
-		// Remove this, add plugins instead
-		var channel = passedVars['channel'];
-		switch(passedVars['command']){
-			case 'help':
-				this.message(channel, passedVars['user'] + ': You need help, dont you?');
-			break;
-			case 'ping':
-				this.message(channel, 'Version: '+this.bot.VERSION);
-			break;
-			case 'eval':
-				code = passedVars['message'].replace(this.bot.config.prefix+"eval", "");
-				if(this.isOwner(passedVars['user'], passedVars['host'])){
-					result = evaluate.apply(this, [code]);
-					if(result){
-						this.message(channel, result);
-					}
-				}else{
-					this.message(channel, 'Your not my owner!');
-				}
-			break;
-		}
+		this.plugins.fire(event.toLowerCase(), passedVars);
 	},
 	isOwner: function(user, host){
 		var config = this.bot.config;
 		for(owner in config.owners){
-			return user == owner && config.owners[owner] == host;
+			if(user == owner && config.owners[owner] == host){
+				return true;
+			}
 		}
+		return false;
 	},
 	/* Channel methods */
 	join: function(channel){
@@ -165,4 +136,4 @@ IRC.prototype = {
 		this.send('PRIVMSG', target + ' :' + message);
 	}
 };
-module.exports.IRC = IRC;
+exports.IRC = IRC;
