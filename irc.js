@@ -23,6 +23,9 @@ IRC.prototype = {
 				self.send('NICK', bot.config.nick);
 				// Cool hack for repeating strings
 				self.send('USER', new Array(5).join(bot.config.name + ' '));
+				if(bot.config.password){
+					self.send('NS IDENTIFY', bot.config.password);
+				}
 				[].forEach.call(config.channels, function(channel){
 					self.join(channel);
 				});
@@ -48,7 +51,7 @@ IRC.prototype = {
 			event;
 		// Pings should later on be handled in fireEvent
 		if(data.match('^PING')){
-			console.log('[PING] Receieved');
+			console.log('[PING] Received');
 			this.handlePing(response);
 		}else{
 			var passedVars = {};
@@ -91,6 +94,7 @@ IRC.prototype = {
 						passedVars['message'] = message;
 					}
 				}
+				console.log(rawResponse);
 				if(event){
 					self.fireEvent(event, passedVars);
 				}
