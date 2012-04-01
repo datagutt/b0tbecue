@@ -90,9 +90,9 @@ IRC.prototype = {
 							// so the command doesnt appear in the arguments list
 							// then split it so it becomes an array
 							passedVars['arguments'] = message.slice(self.bot.config.prefix.length+first.length).split(' ');
-					}else{
-						passedVars['message'] = message;
-					}
+						}else{
+							passedVars['message'] = message;
+						}
 				}
 				console.log(rawResponse);
 				if(event){
