@@ -6,7 +6,10 @@ function log(content, channel){
 	var folder = 'plugins/logs/';
 	var filename = folder + channel + '-' + date + '.txt';
 	var original_content = content;
-	if(logged && !logged[date]){
+	if(!logged[channel]){
+		logged[channel] = [];
+	}
+	if(logged && !logged[channel][date]){
 		content = 'Started logging at: ' + date + '\n' + content;
 		logged[date] = date;
 	}
