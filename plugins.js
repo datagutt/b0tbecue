@@ -5,19 +5,13 @@ var Plugins = function(bot){
 };
 Plugins.prototype = {
 	load: function(plugins){
-		if(typeof plugins == 'array'){
-			[].forEach(plugins, function(plugin){
-				this.load(plugin);
-			});
-		}else{
-			for(plugin in plugins){
-				var file = plugins[plugin];
-				var tempPlugin = require('./plugins/'+file);
-				if(typeof tempPlugin == 'object'){
-					tempPlugin.init(this, this.bot);
-				}
-				this.plugins[plugin]= tempPlugin;
+		for(plugin in plugins){
+			var file = plugins[plugin];
+			var tempPlugin = require('./plugins/'+file);
+			if(typeof tempPlugin == 'object'){
+				tempPlugin.init(this, this.bot);
 			}
+			this.plugins[plugin] = tempPlugin;
 		}
 	},
 	isPluginFunction: function(plugin, func){

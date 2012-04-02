@@ -1,1 +1,2 @@
 configs/config.local.js
+plugins/logs/*.txt

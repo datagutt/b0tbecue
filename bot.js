@@ -25,7 +25,7 @@ var Bot = function(config){
 	}
 	this.commands = {};
 	IRC.config = config.irc;
-	Plugins.load(config.plugins || {
+	Plugins.load(config.bot.plugins || {
 		'Base': 'base.plugin.js'
 	});
 };

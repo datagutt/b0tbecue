@@ -113,7 +113,6 @@ IRC.prototype = {
 					event = 'command';
 				}else if(passedVars['message']){
 					event = 'message';
-					console.log('[MSG] ['+passedVars['channel']+'] ['+passedVars['user']+'] '+passedVars['message']);
 				}
 			break;
 		}
