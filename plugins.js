@@ -1,6 +1,7 @@
 var Plugins = function(bot){
 	this.bot = bot;
 	this.hooks = {};
+	this.plugins = {};
 };
 Plugins.prototype = {
 	load: function(plugins){
@@ -13,11 +14,14 @@ Plugins.prototype = {
 				var file = plugins[plugin];
 				var tempPlugin = require('./plugins/'+file);
 				if(typeof tempPlugin == 'object'){
-					tempPlugin.init(this);
+					tempPlugin.init(this, this.bot);
 				}
-				this.plugins = plugin;
+				this.plugins[plugin]= tempPlugin;
 			}
 		}
+	},
+	isPluginFunction: function(plugin, func){
+		return !!(plugin && this.plugins[plugin] && this.plugins[plugin][func] && typeof this.plugins[plugin][func] == 'function');
 	},
 	listen: function(plugin, event, func){
 		if(typeof this.hooks[plugin] == 'undefined'){

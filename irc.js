@@ -94,7 +94,6 @@ IRC.prototype = {
 							passedVars['message'] = message;
 						}
 				}
-				console.log(rawResponse);
 				if(event){
 					self.fireEvent(event, passedVars);
 				}
@@ -114,27 +113,18 @@ IRC.prototype = {
 					event = 'command';
 				}else if(passedVars['message']){
 					event = 'message';
-					console.log('[MSG] ['+passedVars['channel']+'] '+passedVars['user']+'] '+passedVars['message']);
+					console.log('[MSG] ['+passedVars['channel']+'] ['+passedVars['user']+'] '+passedVars['message']);
 				}
 			break;
 		}
 		this.plugins.fire(event.toLowerCase(), passedVars);
-	},
-	isOwner: function(user, host){
-		var config = this.bot.config;
-		for(owner in config.owners){
-			if(user == owner && config.owners[owner] == host){
-				return true;
-			}
-		}
-		return false;
 	},
 	/* Channel methods */
 	join: function(channel){
 		this.send('JOIN', channel);
 	},
 	part: function(channel){
-		this.part('JOIN', channel);
+		this.send('PART', channel);
 	},
 	message: function(target, message){
 		this.send('PRIVMSG', target + ' :' + message);
