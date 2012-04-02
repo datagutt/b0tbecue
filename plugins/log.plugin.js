@@ -5,6 +5,7 @@ function log(content, channel){
 	var date = now.getDay() + '-' + now.getMonth() + '-' + now.getFullYear();
 	var folder = 'plugins/logs/';
 	var filename = folder + channel + '-' + date + '.txt';
+	var original_content = content;
 	if(logged && !logged[date]){
 		content = 'Started logging at: ' + date + '\n' + content;
 		logged[date] = date;
@@ -14,7 +15,7 @@ function log(content, channel){
 		if(err) {
 			throw err;
 		}else{
-			console.log(content);
+			console.log(original_content);
 		}
 	}); 
 }
