@@ -2,13 +2,66 @@
 <html>
 	<head>
 		<title>B0tbecue control interface</title>
+		<script type="text/javascript" src="/js/N1.min.js"></script>
 	</head>
 	<body>
 		<h1>B0tbecue control interface</h1>
-		<form method="/control" method="get">
-			<input type="button" value="Start" />
-			<input type="button" value="Stop" />
-			<input type="button" value="Activate Global Digital Defense Network" />
+		<form class="form" action="/control" method="post">
+			<label for="action">Action:</label>
+			<select name="action">
+				<!-- If the control interface is available, bot is already started -->
+				<!--<option value="start">Start</option>-->
+				<option value="restart">Restart</option>
+				<option value="stop">Stop</option>
+				<option value="say">Say</option>
+				<option value="join">Join</option>
+				<option value="part">Part</option>
+				<option value="skynet">Activate Global Digital Defense Network</option>
+			</select>
+			<br>
+			<label for="channel">Channel:</label>
+			<select name="channel">
+				%channels%
+			</select>
+			<br>
+			<label for="text">Text/channel:</label>
+			<input type="text" name="text" />
+			<br>
+			<input type="submit" name="submit" />
 		</form>
+		<h3>Plugins (loaded)</h3>
+		<ul class="plugins">
+			%plugins%
+		</ul>
+		<script type="text/javascript">
+			window.WebSocket = window.WebSocket || window.MozWebSocket;
+			var socket_url = 'ws://' + window.location.host;
+			var connection = new WebSocket(socket_url);
+			var input_values = {};
+			var form = N1.getElement('.form');
+			connection.onopen = function() {};
+			connection.onerror = function (error) {
+			};
+			connection.onmessage = function (message) {
+				try {
+					var json = JSON.parse(message.data);
+				}catch (e){
+					console.log('This doesn\'t look like a valid JSON: ', message.data);
+					return;
+				}
+			};
+			N1.documentReady(function(){
+				N1.addEvent(form, 'submit', function(e){
+					form = N1.getElement('.form');
+					[].forEach.call(form, function(input, i){
+						input_values[input.name] = input.value;
+					});
+					connection.send(JSON.stringify(input_values));
+					N1.preventDefault(e);
+					return false;
+				});
+			});
+		</script>
 	</body>
 </html>
+<!-- made by datagutt for b0tbecue -->

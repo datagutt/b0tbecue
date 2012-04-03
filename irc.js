@@ -6,6 +6,7 @@ var IRC = function(bot, plugins){
 };
 IRC.prototype = {
 	socket: new net.Socket(),
+	channels: [],
 	config: {
 		server: 'irc.freenode.net',
 		port: 6667,
@@ -118,11 +119,17 @@ IRC.prototype = {
 		}
 		this.plugins.fire(event.toLowerCase(), passedVars);
 	},
+	disconnect: function(){
+		console.log('Disconnected.');
+		this.socket.end();
+	},
 	/* Channel methods */
 	join: function(channel){
+		this.channels[channel] = channel;
 		this.send('JOIN', channel);
 	},
 	part: function(channel){
+		this.channels[channel] = undefined;
 		this.send('PART', channel);
 	},
 	nick: function(nick){
