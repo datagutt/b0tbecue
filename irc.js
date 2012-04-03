@@ -20,7 +20,7 @@ IRC.prototype = {
 		socket.on('connect', function() {
 			console.log('Connected to '+server+':'+port);
 			setTimeout(function(){
-				self.send('NICK', bot.config.nick);
+				self.nick(bot.config.nick);
 				// Cool hack for repeating strings
 				self.send('USER', new Array(5).join(bot.config.name + ' '));
 				if(bot.config.password){
@@ -124,6 +124,27 @@ IRC.prototype = {
 	},
 	part: function(channel){
 		this.send('PART', channel);
+	},
+	nick: function(nick){
+		this.send("NICK", nick);
+	},
+	op: function(channel, user){
+		this.send('MODE',  channel + ' +o ' + user);
+	},
+	deop: function(channel, user){
+		this.send('MODE', channel + ' -o ' + user);
+	},
+	kick: function(channel, user, message){
+		if(!message){
+			message = 'Your behavior is not conducive to the desired environment.';
+		}
+		this.send('KICK', channel + ' ' + user + ' :' + message);
+	},
+	ban: function(channel, user){
+		this.send('MODE',  channel + ' +b ' + user);
+	},
+	unban: function(channel, user){
+		this.send('MODE',  channel + ' -b ' + user);
 	},
 	message: function(target, message){
 		this.send('PRIVMSG', target + ' :' + message);
