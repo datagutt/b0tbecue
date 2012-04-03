@@ -9,6 +9,8 @@ config.bot = {
 	name: 'b0tbecue-dev',
 	prefix: '@',
 	password: '',
+	/* For control plugin */
+	controlpw: 'password',
 	owners: {
 		'example': '~example@127.0.0.1'
 	}

@@ -13,7 +13,11 @@
 				<!--<option value="start">Start</option>-->
 				<option value="restart">Restart</option>
 				<option value="stop">Stop</option>
+				<option value="raw">Raw</option>
 				<option value="say">Say</option>
+				<option value="part">Nick</option>
+				<option value="op">OP</option>
+				<option value="deop">DeOP</option>
 				<option value="join">Join</option>
 				<option value="part">Part</option>
 				<option value="skynet">Activate Global Digital Defense Network</option>
@@ -24,8 +28,11 @@
 				%channels%
 			</select>
 			<br>
-			<label for="text">Text/channel:</label>
+			<label for="text">Value:</label>
 			<input type="text" name="text" />
+			<br>
+			<label for="password">Control password:</label>
+			<input type="password" name="controlpw" />
 			<br>
 			<input type="submit" name="submit" />
 		</form>
@@ -37,19 +44,13 @@
 			window.WebSocket = window.WebSocket || window.MozWebSocket;
 			var socket_url = 'ws://' + window.location.host;
 			var connection = new WebSocket(socket_url);
-			var input_values = {};
-			var form = N1.getElement('.form');
-			connection.onopen = function() {};
-			connection.onerror = function (error) {
-			};
-			connection.onmessage = function (message) {
-				try {
-					var json = JSON.parse(message.data);
-				}catch (e){
-					console.log('This doesn\'t look like a valid JSON: ', message.data);
-					return;
+			connection.onmessage = function(message){
+				if(message.data == 'wrongpw'){
+					alert('Dude, wrong password, stop hax0ring.');
 				}
 			};
+			var input_values = {};
+			var form = N1.getElement('.form');
 			N1.documentReady(function(){
 				N1.addEvent(form, 'submit', function(e){
 					form = N1.getElement('.form');

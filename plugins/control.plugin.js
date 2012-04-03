@@ -5,7 +5,6 @@ var Control = function(){
 
 };
 Control.save = function(bot, data){
-	data = JSON.parse(data);
 	if(data && data.action){
 		switch(data.action){
 			case 'stop':
@@ -32,6 +31,27 @@ Control.save = function(bot, data){
 			case 'part':
 				if(data.text){
 					IRC.part(data.text);
+				}
+			break;
+			case 'op':
+				if(data.channel && data.text){
+					IRC.op(data.channel, data.text);
+				}
+			break;
+			case 'deop':
+				if(data.channel && data.text){
+					IRC.deop(data.channel, data.text);
+				}
+			break;
+			case 'nick':
+				if(data.text){
+					IRC.nick(data.text);
+				}
+			break;
+			case 'raw':
+				// This is uhm, not a good way to use the send function
+				if(data.text){
+					IRC.send(data.text, '');
 				}
 			break;
 		}
@@ -70,10 +90,10 @@ Control.start = function(bot){
 		    if(plugin_list){
 		    	data = data.replace('%plugins%', plugin_list);
 		    }
-		    if(channel_list){
-		    	data = data.replace('%channels%', channel_list);
-		    }
-		  	response.end(data);
+			if(channel_list){
+				data = data.replace('%channels%', channel_list);
+			}
+			response.end(data);
 		});
 	});
 	server.listen(port, host);
@@ -83,8 +103,13 @@ Control.start = function(bot){
 	wsServer.on('request', function(request) {
 		var connection = request.accept(null, request.origin);
 		connection.on('message', function(message) {
+			var data = JSON.parse(message.utf8Data);
 			if (message.type === 'utf8') {
-				Control.save(bot, message.utf8Data);
+				if(data.controlpw && data.controlpw == bot.config.controlpw){
+					Control.save(bot, data);
+				}else{
+					connection.send('wrongpw');
+				}
 			}
     	});
     	connection.on('close', function(connection) {
