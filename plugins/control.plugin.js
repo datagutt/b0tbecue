@@ -46,7 +46,6 @@ Control.start = function(bot){
 			case '':
 				var plugin_list = '', channel_list = '';
 				url += 'interface.html';
-				//});;
 				for(plugin in Plugins.plugins){
 					plugin_list += '<li>'+plugin+'</li>\n';
 				};
