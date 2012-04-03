@@ -92,7 +92,6 @@ Control.start = function(bot){
 	});
 };
 exports.init = function(plugins, bot){
-	console.log(Plugins.plugins);
 	console.log('Starting control plugin…');
 	Control.start(bot);
 };
