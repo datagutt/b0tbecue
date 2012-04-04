@@ -24,7 +24,7 @@ function log(content, channel){
 }
 exports.init = function(plugins, bot){
 	plugins.listen('Log', 'topic', function(args){
-		log('[TOPIC] '+args.message, args.channel);
+		log('[TOPIC] '+args.topic, args.channel);
 	});
 	plugins.listen('Log', 'command', function(args){
 		log('[COM] ['+args.channel+'] '+args.user+' ran command: '+args.command, args.channel);

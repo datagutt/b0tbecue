@@ -97,6 +97,11 @@ IRC.prototype = {
 							passedVars['message'] = message;
 						}
 					}
+					if(event == 'TOPIC'){
+						// Same as message parsing
+						var topic = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+						passedVars['topic'] = topic;
+					}
 					// Userlist recieved when joining channel
 					if(event == '353'){
 						var users = rawResponse.slice(5);	
@@ -133,9 +138,6 @@ IRC.prototype = {
 			break;
 			case 'PART':
 				this.users[passedVars.channel][passedVars.user] = undefined;
-			break;
-			// Userlist recieved when joining channel
-			case '353':
 			break;
 			case 'PRIVMSG':
 				if(passedVars['command']){
