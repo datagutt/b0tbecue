@@ -23,7 +23,13 @@ exports.init = function(plugins, bot){
 	bot.addCommand('userlevel', '[<user>] [<host>]', 'Shows the level of the user', USER_LEVEL_GLOBAL);
 	bot.addCommand('ping', '', 'Shows some info about the bot', USER_LEVEL_GLOBAL, true);
 	bot.addCommand('eval', '<code>', 'Executes the code', USER_LEVEL_OWNER);
-	plugins.listen('Base', 'command', function(args){
+	
+	plugins.listen('Base', 'command', function(args){	
+		var level = bot.getUserLevel(args.user, args.host);
+		if(!bot.isCommand(args.command, level)){
+			IRC.message(args.channel, args.user + ': You are not allowed to run that command!');
+			return;
+		}
 		switch(args.command){
 			case 'help':
 				if(args.arguments && args.arguments[0]){
@@ -60,14 +66,10 @@ exports.init = function(plugins, bot){
 			break;
 			case 'eval':
 				code = args.arguments.join(' ');
-				if(bot.isOwner(args.user, args.host)){
-					evaluated = evaluate.apply(this, [code, args.channel]);
-					result = evaluated ? util.inspect(evaluated) : false;
-					if(result){
-						IRC.message(args.channel, result);
-					}
-				}else{
-					IRC.message(args.channel, 'Your not my owner!');
+				evaluated = evaluate.apply(this, [code, args.channel]);
+				result = evaluated ? util.inspect(evaluated) : false;
+				if(result){
+					IRC.message(args.channel, result);
 				}
 			break;
 		}

@@ -1,11 +1,16 @@
 exports.init = function(plugins, bot){
-	bot.addCommand('op', '[<user>]', 'Gives operators status to user', USER_LEVEL_ADMIN);
+	bot.addCommand('say', '[<channel>] [<message>]', 'Says message to channel', USER_LEVEL_ADMIN);
+	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
+	bot.addCommand('join', '[<channel>]', 'Joins channel', USER_LEVEL_ADMIN);
+	bot.addCommand('part', '[<channel>]', 'Parts channel', USER_LEVEL_ADMIN);
+	bot.addCommand('kick', '[<user>]', 'Kicks user from channel', USER_LEVEL_MOD);
+	bot.addCommand('kickban', '[<user>]', 'Kick and bans user from channel', USER_LEVEL_MOD);
+	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
+	bot.addCommand('op', '[<user>]', 'Gives operator status to user', USER_LEVEL_MOD);
+	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD);
+	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
+	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'command', function(args){
-		var level = bot.getUserLevel(args.user, args.host);
-		if(bot.isCommand(args.command) && !bot.canUseCommand(args.command, level)){
-			IRC.message(args.channel, args.user + ': You are not allowed to run that command!');
-			return;
-		}
 		switch(args.command){
 			case 'say':
 				if(args.arguments && args.arguments[0]){

@@ -165,6 +165,9 @@ IRC.prototype = {
 	nick: function(nick){
 		this.send("NICK", nick);
 	},
+	topic: function(topic){
+		this.send("TOPIC", channel + ' :' + topic);
+	},
 	op: function(channel, user){
 		this.send('MODE',  channel + ' +o ' + user);
 	},

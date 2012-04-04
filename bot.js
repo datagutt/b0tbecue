@@ -4,7 +4,7 @@ const VERSION = "0.0.1";
 // Various user levels
 // Should be constants, but then i cant make them global
 exports.USER_LEVEL_GLOBAL = USER_LEVEL_GLOBAL = 1;
-exports.USER_LEVEL_MODERATOR = USER_LEVEL_MODERATOR = 2;
+exports.USER_LEVEL_MOD = USER_LEVEL_MOD = 2;
 exports.USER_LEVEL_ADMIN = USER_LEVEL_ADMIN = 3;
 exports.USER_LEVEL_OWNER = USER_LEVEL_OWNER = 4;
 var Bot = function(config){
@@ -13,15 +13,15 @@ var Bot = function(config){
 	IRC = exports.IRC = new IRC(this, Plugins);
 	this.VERSION = VERSION;
 	this.config = config.bot;
-	// Owners, moderators, admins
+	// Owners, mods, admins
 	if(!this.config.owners){
 		this.config.owners = {};
 	}
 	if(!this.config.admins){
 		this.config.admins = {};
 	}
-	if(!this.config.moderators){
-		this.config.moderators = {};
+	if(!this.config.mods){
+		this.config.mods = {};
 	}
 	this.commands = {};
 	IRC.config = config.irc;
@@ -42,11 +42,8 @@ Bot.prototype = {
 			}
 		}
 	},
-	isCommand: function(name){
-		return !!this.commands[name];
-	},
-	canUseCommand: function(name, level){
-		if(this.commands && this.commands[name]){
+	isCommand: function(name, level){
+		if(this.commands[name]){
 			return this.commands[name]['level'] <= level;
 		}
 		return false;
@@ -69,10 +66,10 @@ Bot.prototype = {
 		}
 		return false;
 	},
-	isModerator: function(user, host){
+	isMod: function(user, host){
 		var config = this.config;
-		for(moderator in config.moderators){
-			if(user == moderators && config.moderators[moderator] == host){
+		for(mod in config.mods){
+			if(user == mod && config.mods[mod] == host){
 				return true;
 			}
 		}
@@ -83,8 +80,8 @@ Bot.prototype = {
 			return USER_LEVEL_OWNER;
 		}else if(user && host && this.isAdmin(user, host)){
 			return USER_LEVEL_ADMIN;
-		}else if(user && host && this.isModerator(user, host)){
-			return USER_LEVEL_MODERATOR;
+		}else if(user && host && this.isMod(user, host)){
+			return USER_LEVEL_MOD;
 		}else{
 			return USER_LEVEL_GLOBAL;
 		}
