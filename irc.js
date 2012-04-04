@@ -3,8 +3,13 @@ var net = require('net');
 var IRC = function(bot, plugins){
 	this.bot = bot;
 	this.plugins = plugins;
+	this.floodDelay = this.minFloodDelay;
 };
 IRC.prototype = {
+	minFloodDelay: 250,
+	maxFloodDelay: 500,
+	floodDelay: 0,
+	lastMessageTime: 0,
 	socket: new net.Socket(),
 	channels: [],
 	users: [],
@@ -41,7 +46,22 @@ IRC.prototype = {
 		socket.connect(port, server);
 	},
 	send: function(action, message){
-		this.socket.write(action + ' ' + message + '\r\n');
+		var socket = this.socket;
+		var self = this;
+		var time = new Date().getTime();
+		if (this.lastMessageTime + this.floodDelay > time){
+			setTimeout(function(){
+				socket.write(action + ' ' + message + '\r\n');
+			}, this.lastMessageTime + this.floodDelay - time);
+			this.lastMessageTime += this.floodDelay;
+			this.floodDelay = Math.min(this.floodDelay + 50, this.maxFloodDelay);
+		} else {
+			if (time - this.lastMessageTime > this.floodDelay * 2) {
+				this.floodDelay = this.minFloodDelay;
+			}
+			socket.write(action + ' ' + message + '\r\n');
+			this.lastMessageTime = time;
+		}
 	},
 	parse: function(data, self){
 		// IRC seems to put a : infront of lines, remove that
@@ -84,6 +104,9 @@ IRC.prototype = {
 						// contain a message, then join the values left
 						// and remove : infront to get a string
 						message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+
+						passedVars['message'] = message;
+
 						// get the first part of a message
 						first = message.split(' ')[0];
 						if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
@@ -93,8 +116,6 @@ IRC.prototype = {
 							// so the command doesnt appear in the arguments list
 							// then split it so it becomes an array
 							passedVars['arguments'] = message.slice(self.bot.config.prefix.length+first.length).split(' ');
-						}else{
-							passedVars['message'] = message;
 						}
 					}
 					if(event == 'TOPIC'){
@@ -189,7 +210,12 @@ IRC.prototype = {
 		this.send('MODE',  channel + ' -b ' + user);
 	},
 	message: function(target, message){
-		this.send('PRIVMSG', target + ' :' + message);
+		var self = this;
+
+		var messages = message.split("\n");
+		[].forEach.call(messages, function(message){
+			self.send('PRIVMSG', target + ' :' + message);
+		});
 	}
 };
 exports.IRC = IRC;
