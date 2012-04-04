@@ -54,6 +54,17 @@ Control.save = function(bot, data){
 					IRC.send(data.text, '');
 				}
 			break;
+			case 'skynet':
+				// Value most contain sekrit password
+				if(data.text && data.channel && data.text == bot.config.skynetpw){
+					var users = IRC.users[data.channel];
+					console.log(users);
+					for(user in users){
+						console.log(users[user], i);
+						IRC.kick(data.channel, users[user], 'You will not be given a second chance. You cannot save John Connor!');
+					}
+				}
+			break;
 		}
 	}
 }
@@ -64,13 +75,20 @@ Control.start = function(bot){
 		switch(request.url){
 			case 'index.html':
 			case '':
-				var plugin_list = '', channel_list = '';
+				var plugin_list = '', channel_list = '', user_list = '';
 				url += 'interface.html';
 				for(plugin in Plugins.plugins){
 					plugin_list += '<li>'+plugin+'</li>\n';
 				};
 				for(channel in IRC.channels){
 					channel_list += '<option value="'+IRC.channels[channel]+'">'+IRC.channels[channel]+'</option>\n';
+				};
+				for(channel in IRC.users){
+					user_list += '<h4>'+channel+'</h4><ul>\n';
+					for(user in IRC.users[channel]){
+						user_list += '<li>'+IRC.users[channel][user]+'</h4>\n';
+					}
+					user_list += '</ul>\n';
 				};
 			break;
 			case 'js/N1.min.js':
@@ -92,6 +110,9 @@ Control.start = function(bot){
 		    }
 			if(channel_list){
 				data = data.replace('%channels%', channel_list);
+			}
+			if(user_list){
+				data = data.replace('%users%', user_list);
 			}
 			response.end(data);
 		});
@@ -117,6 +138,6 @@ Control.start = function(bot){
 	});
 };
 exports.init = function(plugins, bot){
-	console.log('Starting control plugin…');
+	console.log('Starting control plugin...');
 	Control.start(bot);
 };

@@ -11,6 +11,7 @@ config.bot = {
 	password: '',
 	/* For control plugin */
 	controlpw: 'password',
+	skynetpw: 'skynet',
 	owners: {
 		'example': '~example@127.0.0.1'
 	}

@@ -7,6 +7,7 @@ var IRC = function(bot, plugins){
 IRC.prototype = {
 	socket: new net.Socket(),
 	channels: [],
+	users: [],
 	config: {
 		server: 'irc.freenode.net',
 		port: 6667,
@@ -62,7 +63,8 @@ IRC.prototype = {
 					// Get host and user using regex
 					var hostmask = /(.*)!((.*)@(.*))/.exec(rawResponse[0]);
 					if(hostmask && hostmask[1] && hostmask[2]){
-						passedVars['user'] = hostmask[1];
+						// Some times, theres a : infront of user
+						passedVars['user'] = hostmask[1].replace(/^:/, '');
 						passedVars['host'] = hostmask[2];
 					}
 					// Get event
@@ -94,7 +96,21 @@ IRC.prototype = {
 						}else{
 							passedVars['message'] = message;
 						}
-				}
+					}
+					// Userlist recieved when joining channel
+					if(event == '353'){
+						var users = rawResponse.slice(5);	
+						var channel = rawResponse[4], passed_users = [];
+						[].forEach.call(users, function(user){
+							// Remove modes and :
+							user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
+							// Make sure it ignores the name of the bot
+							if(user !== self.bot.config.nick){
+								passed_users[user] = user;
+							}
+						});
+						this.users[channel] = passed_users;
+					}
 				if(event){
 					self.fireEvent(event, passedVars);
 				}
@@ -109,6 +125,18 @@ IRC.prototype = {
 	},
 	fireEvent: function(event, passedVars){
 		switch(event){
+			case 'JOIN':
+				// Ignore the bot
+				if(passedVars.user !== this.bot.config.nick){
+					this.users[passedVars.channel][passedVars.user] = passedVars.user;
+				}
+			break;
+			case 'PART':
+				this.users[passedVars.channel][passedVars.user] = undefined;
+			break;
+			// Userlist recieved when joining channel
+			case '353':
+			break;
 			case 'PRIVMSG':
 				if(passedVars['command']){
 					event = 'command';
@@ -126,10 +154,12 @@ IRC.prototype = {
 	/* Channel methods */
 	join: function(channel){
 		this.channels[channel] = channel;
+		this.users[channel] = [];
 		this.send('JOIN', channel);
 	},
 	part: function(channel){
 		this.channels[channel] = undefined;
+		this.users[channel] = undefined;
 		this.send('PART', channel);
 	},
 	nick: function(nick){

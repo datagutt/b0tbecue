@@ -42,6 +42,15 @@ Bot.prototype = {
 			}
 		}
 	},
+	isCommand: function(name){
+		return !!this.commands[name];
+	},
+	canUseCommand: function(name, level){
+		if(this.commands && this.commands[name]){
+			return this.commands[name]['level'] <= level;
+		}
+		return false;
+	},
 	isOwner: function(user, host){
 		var config = this.config;
 		for(owner in config.owners){
