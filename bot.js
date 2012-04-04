@@ -42,6 +42,12 @@ Bot.prototype = {
 			}
 		}
 	},
+	getCommandMinimumLevel: function(name){
+		if(this.commands[name]){
+			return this.commands[name]['level'];
+		}
+		return false;
+	},
 	isCommand: function(name, level){
 		if(this.commands[name]){
 			return this.commands[name]['level'] <= level;

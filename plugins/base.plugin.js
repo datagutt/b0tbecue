@@ -26,7 +26,11 @@ exports.init = function(plugins, bot){
 	
 	plugins.listen('Base', 'command', function(args){	
 		var level = bot.getUserLevel(args.user, args.host);
-		if(!bot.isCommand(args.command, level)){
+		if(!bot.isCommand(args.command, USER_LEVEL_OWNER)){
+			IRC.message(args.channel, args.user + ': Command doesnt not exist!');
+			return;
+		}
+		if(bot.getCommandMinimumLevel(args.command) > level){
 			IRC.message(args.channel, args.user + ': You are not allowed to run that command!');
 			return;
 		}

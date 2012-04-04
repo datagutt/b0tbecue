@@ -11,6 +11,10 @@ exports.init = function(plugins, bot){
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
 	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'command', function(args){
+		var level = bot.getUserLevel(args.user, args.host);
+		if(!bot.isCommand(args.command, level)){
+			return;
+		}
 		switch(args.command){
 			case 'say':
 				if(args.arguments && args.arguments[0]){
@@ -61,7 +65,13 @@ exports.init = function(plugins, bot){
 					IRC.nick(args.arguments[0]);
 				}
 			break;
-
+			case 'topic':
+				if(args.arguments && args.arguments[0]){
+					// Join all arguments to one message, but remove first argument
+					var topic = args.arguments.join(' ');
+					IRC.topic(args.channel, topic);
+				}
+			break;
 		}
 	});
 }
