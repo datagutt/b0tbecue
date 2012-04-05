@@ -20,7 +20,7 @@ exports.init = function(plugins, bot){
 	plugins.listen('OP', 'join', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(self.config.autoOP){
-			if(level >= USER_LEVEL_ADMIN){
+			if(level >= USER_LEVEL_MOD){
 				IRC.op(args.channel, args.user);
 			}
 		}
