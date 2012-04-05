@@ -146,7 +146,7 @@ exports.init = function(plugins, bot){
 					IRC.message(args.channel, 'Admins: ' + msg);
 				}
 			break;
-			case 'moderators':
+			case 'mods':
 				if(args.arguments && args.arguments[0]){
 					type = args.arguments[0];
 					if(level < USER_LEVEL_MOD){
