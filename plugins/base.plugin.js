@@ -83,6 +83,7 @@ exports.init = function(plugins, bot){
 					type = args.arguments[0];
 					if(level < USER_LEVEL_OWNER){
 						IRC.message(args.channel, 'You dont have permission to change this!');
+						return;
 					}
 					switch(type){
 						case 'add':
@@ -117,6 +118,7 @@ exports.init = function(plugins, bot){
 					type = args.arguments[0];
 					if(level < USER_LEVEL_ADMIN){
 						IRC.message(args.channel, 'You dont have permission to change this!');
+						return;
 					}
 					switch(type){
 						case 'add':
@@ -151,6 +153,7 @@ exports.init = function(plugins, bot){
 					type = args.arguments[0];
 					if(level < USER_LEVEL_MOD){
 						IRC.message(args.channel, 'You dont have permission to change this!');
+						return;
 					}
 					switch(type){
 						case 'add':
