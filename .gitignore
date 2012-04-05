@@ -1,2 +1,4 @@
 configs/config.local.js
+configs/levels.json
+configs/devices.json
 plugins/logs/*.txt

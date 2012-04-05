@@ -1,6 +1,8 @@
 IRC = require('./irc.js').IRC;
 Plugins = require('./plugins.js').Plugins;
-const VERSION = "0.0.1";
+// Database
+mongo = require('mongojs');
+const VERSION = '0.1';
 // Various user levels
 // Should be constants, but then i cant make them global
 exports.USER_LEVEL_GLOBAL = USER_LEVEL_GLOBAL = 1;
@@ -11,18 +13,26 @@ var Bot = function(config){
 	// Init IRC and Plugins, set config variables
 	Plugins = exports.Plugins = new Plugins(this);
 	IRC = exports.IRC = new IRC(this, Plugins);
+	db = exports.db = mongo.connect(config.db.username + ':' + config.db.password + '@' + config.db.server + '/' + config.db.name, ['levels', 'devices']);
 	this.VERSION = VERSION;
-	this.config = config.bot;
 	// Owners, mods, admins
-	if(!this.config.owners){
-		this.config.owners = {};
-	}
-	if(!this.config.admins){
-		this.config.admins = {};
-	}
-	if(!this.config.mods){
-		this.config.mods = {};
-	}
+	db.levels.find({}, function(err, levels){
+		if(err){
+			throw err;
+		}else if(!levels){
+			console.log('No levels found, you need to run install.js first!');
+			process.exit(0);
+		}else{
+			levels.forEach(function(level){
+				for(type in level){
+					if(type !== '_id'){
+						config.bot[type] = level[type];
+					}
+				}
+			});
+		}
+	});
+	this.config = config.bot;
 	this.commands = {};
 	IRC.config = config.irc;
 	Plugins.load(config.bot.plugins || {

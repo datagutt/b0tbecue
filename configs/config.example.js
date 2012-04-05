@@ -11,9 +11,12 @@ config.bot = {
 	password: '',
 	/* For control plugin */
 	controlpw: 'password',
-	skynetpw: 'skynet',
-	owners: {
-		'example': '~example@127.0.0.1'
-	}
+	skynetpw: 'skynet'
+};
+config.db = {
+	server: '127.0.0.1',
+	username: 'example',
+	password: 'password',
+	name: 'b0tbecue'
 };
 exports.config = config;

@@ -23,7 +23,9 @@ exports.init = function(plugins, bot){
 	bot.addCommand('userlevel', '[<user>] [<host>]', 'Shows the level of the user', USER_LEVEL_GLOBAL);
 	bot.addCommand('ping', '', 'Shows some info about the bot', USER_LEVEL_GLOBAL, true);
 	bot.addCommand('eval', '<code>', 'Executes the code', USER_LEVEL_OWNER);
-	
+	bot.addCommand('owners', '<type>', 'Shows owners', USER_LEVEL_GLOBAL);
+	bot.addCommand('admins', '<type>', 'Shows admins', USER_LEVEL_GLOBAL);
+	bot.addCommand('mods', '<type>', 'Shows mods', USER_LEVEL_GLOBAL);
 	plugins.listen('Base', 'command', function(args){	
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, USER_LEVEL_OWNER)){
@@ -74,6 +76,108 @@ exports.init = function(plugins, bot){
 				result = evaluated ? util.inspect(evaluated) : false;
 				if(result){
 					IRC.message(args.channel, result);
+				}
+			break;
+			case 'owners':
+				if(args.arguments && args.arguments[0]){
+					type = args.arguments[0];
+					if(level < USER_LEVEL_OWNER){
+						IRC.message(args.channel, 'You dont have permission to change this!');
+					}
+					switch(type){
+						case 'add':
+							if(args.arguments[1] && args.arguments[2]){
+								var user = args.arguments[1];
+								var host = args.arguments[2];
+								bot.config.owners[user] = host;
+								IRC.message(args.channel, 'User ' + user + ' got added as owner.');
+							}
+						break;
+						case 'remove':
+							if(args.arguments[1]){
+								var user = args.arguments[1];
+								delete bot.config.owners[user];
+								IRC.message(args.channel, 'User ' + user + ' got removed as owner.');
+							}
+						break;
+					}
+					db.levels.save({owners: bot.config.owners}, function(err, data){
+						bot.config.owners = data.owners;
+					});
+				}else{
+					msg = "";
+					for(owner in bot.config.owners){
+						msg += owner + ' ';
+					}
+					IRC.message(args.channel, 'Owners: ' + msg);
+				}
+			break;
+			case 'admins':
+				if(args.arguments && args.arguments[0]){
+					type = args.arguments[0];
+					if(level < USER_LEVEL_ADMIN){
+						IRC.message(args.channel, 'You dont have permission to change this!');
+					}
+					switch(type){
+						case 'add':
+							if(args.arguments[1] && args.arguments[2]){
+								var user = args.arguments[1];
+								var host = args.arguments[2];
+								bot.config.admins[user] = host;
+								IRC.message(args.channel, 'User ' + user + ' got added as admin.');
+							}
+						break;
+						case 'remove':
+							if(args.arguments[1]){
+								var user = args.arguments[1];
+								delete bot.config.admins[user];
+								IRC.message(args.channel, 'User ' + user + ' got removed as admin.');
+							}
+						break;
+					}
+					db.levels.save({admins: bot.config.admins}, function(err, data){
+						bot.config.admins = data;
+					});
+				}else{
+					msg = "";
+					for(admins in bot.config.admins){
+						msg += admin + ' ';
+					}
+					IRC.message(args.channel, 'Admins: ' + msg);
+				}
+			break;
+			case 'moderators':
+				if(args.arguments && args.arguments[0]){
+					type = args.arguments[0];
+					if(level < USER_LEVEL_MOD){
+						IRC.message(args.channel, 'You dont have permission to change this!');
+					}
+					switch(type){
+						case 'add':
+							if(args.arguments[1] && args.arguments[2]){
+								var user = args.arguments[1];
+								var host = args.arguments[2];
+								bot.config.mods[user] = host;
+								IRC.message(args.channel, 'User ' + user + ' got added as mod.');
+							}
+						break;
+						case 'remove':
+							if(args.arguments[1]){
+								var user = args.arguments[1];
+								delete bot.config.mods[user];
+								IRC.message(args.channel, 'User ' + user + ' got removed as mod.');
+							}
+						break;
+					}
+					db.levels.save({mods: bot.config.mods}, function(err, data){
+						bot.config.mods = data;
+					});
+				}else{
+					msg = "";
+					for(mod in bot.config.mods){
+						msg += amod + ' ';
+					}
+					IRC.message(args.channel, 'Mods: ' + msg);
 				}
 			break;
 		}
