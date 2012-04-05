@@ -16,6 +16,9 @@ var Bot = function(config){
 	db = exports.db = mongo.connect(config.db.username + ':' + config.db.password + '@' + config.db.server + '/' + config.db.name, ['levels', 'devices']);
 	this.VERSION = VERSION;
 	// Owners, mods, admins
+	config.bot.owners = {};
+	config.bot.admins = {};
+	config.bot.mods = {};
 	db.levels.find({}, function(err, levels){
 		if(err){
 			throw err;

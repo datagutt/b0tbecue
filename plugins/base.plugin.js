@@ -102,9 +102,7 @@ exports.init = function(plugins, bot){
 							}
 						break;
 					}
-					db.levels.save({owners: bot.config.owners}, function(err, data){
-						bot.config.owners = data.owners;
-					});
+					db.levels.save({owners: bot.config.owners});
 				}else{
 					msg = "";
 					for(owner in bot.config.owners){
@@ -137,9 +135,7 @@ exports.init = function(plugins, bot){
 							}
 						break;
 					}
-					db.levels.save({admins: bot.config.admins}, function(err, data){
-						bot.config.admins = data;
-					});
+					db.levels.save({admins: bot.config.admins});
 				}else{
 					msg = "";
 					for(admin in bot.config.admins){
@@ -172,9 +168,7 @@ exports.init = function(plugins, bot){
 							}
 						break;
 					}
-					db.levels.save({mods: bot.config.mods}, function(err, data){
-						bot.config.mods = data;
-					});
+					db.levels.save({mods: bot.config.mods});
 				}else{
 					msg = "";
 					for(mod in bot.config.mods){
