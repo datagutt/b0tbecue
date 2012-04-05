@@ -9,7 +9,7 @@ function evaluate(code, channel){
 	}
 }
 var helpCommand = function(bot, args){
-	var message = "";
+	var message = '';
 	for(command in bot.commands){
 		var com = bot.commands[command];
 		if(!com.hidden && bot.getUserLevel(args.user, args.host) >= com.level){
@@ -104,7 +104,7 @@ exports.init = function(plugins, bot){
 					}
 					db.levels.save({owners: bot.config.owners});
 				}else{
-					msg = "";
+					msg = '';
 					for(owner in bot.config.owners){
 						msg += owner + ' ';
 					}
@@ -137,7 +137,7 @@ exports.init = function(plugins, bot){
 					}
 					db.levels.save({admins: bot.config.admins});
 				}else{
-					msg = "";
+					msg = '';
 					for(admin in bot.config.admins){
 						msg += admin + ' ';
 					}
@@ -170,7 +170,7 @@ exports.init = function(plugins, bot){
 					}
 					db.levels.save({mods: bot.config.mods});
 				}else{
-					msg = "";
+					msg = '';
 					for(mod in bot.config.mods){
 						msg += mod + ' ';
 					}

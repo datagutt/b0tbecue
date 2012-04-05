@@ -145,7 +145,7 @@ IRC.prototype = {
 		}
 	},
 	handlePing: function(data){
-		var server = data[0].split(":");
+		var server = data[0].split(':');
 		server = server[1].trim();
 		console.log('[PONG] '+server);
 		this.send('PONG', server);
@@ -187,7 +187,7 @@ IRC.prototype = {
 		this.send('PART', channel);
 	},
 	nick: function(nick){
-		this.send("NICK", nick);
+		this.send('NICK', nick);
 	},
 	topic: function(channel, topic){
 		this.send('TOPIC', channel + ' :' + topic);
@@ -224,8 +224,8 @@ IRC.prototype = {
 	},
 	message: function(target, message){
 		var self = this;
-		if(typeof message === 'string' && message.indexOf("\n") != -1){
-			var messages = message.split("\n");
+		if(typeof message === 'string' && message.indexOf('\n') != -1){
+			var messages = message.split('\n');
 			[].forEach.call(messages, function(message){
 				self.send('PRIVMSG', target + ' :' + message);
 			});

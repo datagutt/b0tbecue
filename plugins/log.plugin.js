@@ -1,18 +1,18 @@
 var Color = {};
 var Format = {};
 
-Color.BLACK = "\033[30m";
-Color.RED = "\033[31m";
-Color.GREEN = "\033[32m";
-Color.YELLOW = "\033[33m";
-Color.BLUE = "\033[34m";
-Color.MAGENTA = "\033[35m";
-Color.CYAN = "\033[36m";
-Color.WHITE = "\033[31m";
+Color.BLACK = '\033[30m';
+Color.RED = '\033[31m';
+Color.GREEN = '\033[32m';
+Color.YELLOW = '\033[33m';
+Color.BLUE = '\033[34m';
+Color.MAGENTA = '\033[35m';
+Color.CYAN = '\033[36m';
+Color.WHITE = '\033[31m';
 
-Format.RESET = "\033[0;0m";
-Format.NORMAL = "\033[0m";
-Format.BOLD = "\033[1m";
+Format.RESET = '\033[0;0m';
+Format.NORMAL = '\033[0m';
+Format.BOLD = '\033[1m';
 
 var fs = require('fs');
 var logged = [];
@@ -37,7 +37,7 @@ function log(content, channel, format){
 		if(err) {
 			throw err;
 		}else{
-			console.log((format ? format : "") + original_content + Format.RESET);
+			console.log((format ? format : '') + original_content + Format.RESET);
 		}
 	}); 
 }
