@@ -10,6 +10,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD);
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
 	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
+	bot.addCommand('changePrefix', '[<nick>]', 'Changes prefix of bot', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		var message = args.message.replace(bot.config.prefix+args.command, '')
@@ -91,6 +92,12 @@ exports.init = function(plugins, bot){
 			case 'devoice':
 				if(args.arguments && args.arguments[0]){
 					IRC.devoice(args.channel, args.arguments[0]);
+				}
+			break;
+			case 'changePrefix':
+				if(args.arguments && args.arguments[0]){
+					bot.config.prefix = args.arguments[0];
+					IRC.message(args.channel, 'Prefix change to ' + bot.config.prefix);
 				}
 			break;
 		}
