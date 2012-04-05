@@ -97,6 +97,8 @@ IRC.prototype = {
 						// If it has # infront of it, it gotta be a channel
 						if(/(#(.*))/.exec(channel)){
 							passedVars['channel'] = channel;
+						}else{
+							passedVars['channel'] = passedVars['user'];
 						}
 					}
 					if(event == 'PRIVMSG'){
