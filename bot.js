@@ -6,9 +6,10 @@ const VERSION = '0.1';
 // Various user levels
 // Should be constants, but then i cant make them global
 exports.USER_LEVEL_GLOBAL = USER_LEVEL_GLOBAL = 1;
-exports.USER_LEVEL_MOD = USER_LEVEL_MOD = 2;
-exports.USER_LEVEL_ADMIN = USER_LEVEL_ADMIN = 3;
-exports.USER_LEVEL_OWNER = USER_LEVEL_OWNER = 4;
+exports.USER_LEVEL_VOICE = USER_LEVEL_VOICE = 2;
+exports.USER_LEVEL_MOD = USER_LEVEL_MOD = 3;
+exports.USER_LEVEL_ADMIN = USER_LEVEL_ADMIN = 4;
+exports.USER_LEVEL_OWNER = USER_LEVEL_OWNER = 5;
 var Bot = function(config){
 	// Init IRC and Plugins, set config variables
 	Plugins = exports.Plugins = new Plugins(this);
