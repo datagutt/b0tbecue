@@ -8,6 +8,10 @@ exports.init = function(plugins, bot){
 	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
 	bot.addCommand('op', '[<user>]', 'Gives operator status to user', USER_LEVEL_MOD);
 	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD);
+	bot.addCommand('voice', '[<user>]', 'Gives voice status to user', USER_LEVEL_MOD);
+	bot.addCommand('devoice', '[<user>]', 'Remove voice status from user', USER_LEVEL_MOD);
+	bot.addCommand('mute', '[<user>]', 'Mutes user', USER_LEVEL_MOD);
+	bot.addCommand('unmute', '[<user>]', 'Unmutes user', USER_LEVEL_MOD);
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
 	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
 	bot.addCommand('prefix', '[<prefix>]', 'Changes prefix of bot', USER_LEVEL_OWNER);

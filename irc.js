@@ -212,7 +212,7 @@ IRC.prototype = {
 	voice: function(channel, user){
 		this.send('MODE',  channel + ' +v ' + user);
 	},
-	unvoice: function(channel, user){
+	devoice: function(channel, user){
 		this.send('MODE',  channel + ' -v ' + user);
 	},
 	mute: function(channel, user){
