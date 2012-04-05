@@ -1,4 +1,5 @@
 exports.init = function(plugins, bot){
+	var self = this;
 	bot.addCommand('say', '[<channel>] [<message>]', 'Says message to channel', USER_LEVEL_ADMIN);
 	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
 	bot.addCommand('join', '[<channel>]', 'Joins channel', USER_LEVEL_ADMIN);
@@ -15,6 +16,15 @@ exports.init = function(plugins, bot){
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
 	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
 	bot.addCommand('prefix', '[<prefix>]', 'Changes prefix of bot', USER_LEVEL_OWNER);
+	bot.addCommand('autoOP', '[on|off]', 'AutoOP on/off', USER_LEVEL_OWNER);
+	plugins.listen('OP', 'join', function(args){
+		var level = bot.getUserLevel(args.user, args.host);
+		if(self.config.autoOP){
+			if(level >= USER_LEVEL_ADMIN){
+				IRC.op(args.channel, args.user);
+			}
+		}
+	});
 	plugins.listen('OP', 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		var message = args.message.replace(bot.config.prefix+args.command, '')
@@ -119,7 +129,14 @@ exports.init = function(plugins, bot){
 			case 'prefix':
 				if(args.arguments && args.arguments[0]){
 					bot.config.prefix = args.arguments[0];
-					IRC.message(args.channel, 'Prefix change to ' + bot.config.prefix);
+					IRC.message(args.channel, 'Prefix changed to ' + bot.config.prefix);
+				}
+			break;
+			case 'autoOP':
+				if(args.arguments && args.arguments[0]){
+					self.config.autoOP = args.arguments[0] == 'on' ? true : false;
+					var state = self.config.autoOP ? 'on' : 'off';
+					IRC.message(args.channel, 'AutoOP value changed to ' + state);
 				}
 			break;
 		}
