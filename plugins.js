@@ -6,9 +6,12 @@ var Plugins = function(bot){
 Plugins.prototype = {
 	load: function(plugins){
 		for(plugin in plugins){
-			var file = plugins[plugin];
+			var file = plugins[plugin].file;
 			var tempPlugin = require('./plugins/'+file);
 			if(typeof tempPlugin == 'object'){
+				if(plugins[plugin].config){
+					tempPlugin.config = plugins[plugin].config;
+				}
 				tempPlugin.init(this, this.bot);
 			}
 			this.plugins[plugin] = tempPlugin;

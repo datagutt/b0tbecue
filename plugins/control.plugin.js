@@ -55,7 +55,7 @@ Control.save = function(bot, data){
 			break;
 			case 'skynet':
 				// Value must contain sekrit password
-				if(data.text && data.channel && data.text == bot.config.skynetpw){
+				if(data.text && data.channel && data.text == config.skynet_password){
 					var users = IRC.users[data.channel];
 					for(user in users){
 						IRC.kick(data.channel, users[user], 'You will not be given a second chance. You cannot save John Connor!');
@@ -65,8 +65,8 @@ Control.save = function(bot, data){
 		}
 	}
 }
-Control.start = function(bot){
-	var host = bot.config.controlhost, port = bot.config.controlport;
+Control.start = function(self, bot){
+	var host = self.config.host, port = self.config.port;
 	var server = http.createServer(function(request, response) {
 		var url = 'plugins/control/', plugins = [];
 		request.url = request.url.replace('/', '');
@@ -124,7 +124,7 @@ Control.start = function(bot){
 		connection.on('message', function(message) {
 			var data = JSON.parse(message.utf8Data);
 			if (message.type === 'utf8') {
-				if(data.controlpw && data.controlpw == bot.config.controlpw){
+				if(data.controlpw && data.controlpw == config.password){
 					Control.save(bot, data);
 				}else{
 					connection.send('wrongpw');
@@ -136,6 +136,5 @@ Control.start = function(bot){
 	});
 };
 exports.init = function(plugins, bot){
-	console.log('Starting control plugin...');
-	Control.start(bot);
+	Control.start(this, bot);
 };

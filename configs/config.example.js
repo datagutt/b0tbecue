@@ -9,11 +9,10 @@ config.bot = {
 	name: 'b0tbecue-dev',
 	prefix: '@',
 	password: '',
-	/* For control plugin */
-	controlpw: 'password',
-	controlhost: '127.0.0.1',
-	controlport: 8080,
-	skynetpw: 'skynet'
+	plugins: {
+		'Base': {file: 'base.plugin.js'},
+		'Control': {file: 'control.plugin.js', config: {host: '127.0.0.1', port: '8080', password: '', skynet_password: ''}}
+	}
 };
 config.db = {
 	server: '127.0.0.1',
