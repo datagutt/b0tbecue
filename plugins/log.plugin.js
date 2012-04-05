@@ -33,6 +33,11 @@ exports.init = function(plugins, bot){
 	plugins.listen('Log', 'command', function(args){
 		log('[COM] ['+args.channel+'] '+args.user+' ran command: '+args.command, args.channel);
 		if(args.command == 'log'){
+			var level = bot.getUserLevel(args.user, args.host);
+			if(!bot.isCommand(args.command, level)){
+				return;
+			}
+
 			if(args.arguments && args.arguments[1]){
 				var channel = args.arguments[1];
 			}
