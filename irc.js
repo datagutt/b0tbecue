@@ -115,7 +115,7 @@ IRC.prototype = {
 							// Slice using the prefix length+command length
 							// so the command doesnt appear in the arguments list
 							// then split it so it becomes an array
-							passedVars['arguments'] = message.slice(self.bot.config.prefix.length+first.length).split(' ');
+							passedVars['arguments'] = message.slice(first.length + 1).split(' ');
 						}
 					}
 					if(event == 'TOPIC'){
