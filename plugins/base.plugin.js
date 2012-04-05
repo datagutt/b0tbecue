@@ -23,9 +23,9 @@ exports.init = function(plugins, bot){
 	bot.addCommand('userlevel', '[<user>] [<host>]', 'Shows the level of the user', USER_LEVEL_GLOBAL);
 	bot.addCommand('ping', '', 'Shows some info about the bot', USER_LEVEL_GLOBAL, true);
 	bot.addCommand('eval', '<code>', 'Executes the code', USER_LEVEL_OWNER);
-	bot.addCommand('owners', '<type>', 'Shows owners', USER_LEVEL_GLOBAL);
-	bot.addCommand('admins', '<type>', 'Shows admins', USER_LEVEL_GLOBAL);
-	bot.addCommand('mods', '<type>', 'Shows mods', USER_LEVEL_GLOBAL);
+	bot.addCommand('owners', '<type>', 'Shows owners', USER_LEVEL_MOD);
+	bot.addCommand('admins', '<type>', 'Shows admins', USER_LEVEL_MOD);
+	bot.addCommand('mods', '<type>', 'Shows mods', USER_LEVEL_MOD);
 	plugins.listen('Base', 'command', function(args){	
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, USER_LEVEL_OWNER)){
