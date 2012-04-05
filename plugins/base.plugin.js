@@ -175,7 +175,7 @@ exports.init = function(plugins, bot){
 				}else{
 					msg = "";
 					for(mod in bot.config.mods){
-						msg += amod + ' ';
+						msg += mod + ' ';
 					}
 					IRC.message(args.channel, 'Mods: ' + msg);
 				}
