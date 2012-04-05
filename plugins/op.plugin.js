@@ -3,8 +3,8 @@ exports.init = function(plugins, bot){
 	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
 	bot.addCommand('join', '[<channel>]', 'Joins channel', USER_LEVEL_ADMIN);
 	bot.addCommand('part', '[<channel>]', 'Parts channel', USER_LEVEL_ADMIN);
-	bot.addCommand('kick', '[<user>]', 'Kicks user from channel', USER_LEVEL_MOD);
-	bot.addCommand('kickban', '[<user>]', 'Kick and bans user from channel', USER_LEVEL_MOD);
+	bot.addCommand('kick', '[<user>] [<message>]', 'Kicks user from channel', USER_LEVEL_MOD);
+	bot.addCommand('kickban', '[<user>] [<message>]', 'Kick and bans user from channel', USER_LEVEL_MOD);
 	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
 	bot.addCommand('op', '[<user>]', 'Gives operator status to user', USER_LEVEL_MOD);
 	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD);
@@ -35,14 +35,16 @@ exports.init = function(plugins, bot){
 			break;
 			case 'kick':
 				if(args.arguments && args.arguments[0]){
-					IRC.kick(args.channel, args.arguments[0]);
+					var message = args.arguments.join(' ').replace(args.arguments[0], '');
+					IRC.kick(args.channel, args.arguments[0], message);
 				}
 			break;
 			case 'kickban':
 				if(args.arguments && args.arguments[0]){
+					var message = args.arguments.join(' ').replace(args.arguments[0], '');
 					IRC.ban(args.channel, args.arguments[0]);
 					// Get user from hostname
-					IRC.kick(args.channel, args.arguments[0].split('!')[0]);
+					IRC.kick(args.channel, args.arguments[0].split('!')[0]. message);
 				}
 			break;
 			case 'unban':
@@ -67,7 +69,7 @@ exports.init = function(plugins, bot){
 			break;
 			case 'topic':
 				if(args.arguments && args.arguments[0]){
-					// Join all arguments to one message, but remove first argument
+					// Join all arguments to one message
 					var topic = args.arguments.join(' ');
 					IRC.topic(args.channel, topic);
 				}
