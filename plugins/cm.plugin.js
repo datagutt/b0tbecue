@@ -11,11 +11,13 @@ var addDevice = function(manufacturer, name, model, download_link){
 	devices[manufacturer][name]['name'] = name;
 	devices[manufacturer][name]['model'] = model;
 	devices[manufacturer][name]['download_link'] = download_link;
+	db.devices.save(devices);
 }
 var removeDevice = function(manufacturer, name){
 	if(devices[manufacturer] && devices[manufacturer][name]){
 		devices[manufacturer][name] = undefined;
 	}
+	db.devices.save(devices);
 }
 var getDevice = function(name){
 	for(manufacturer in devices){
@@ -30,8 +32,10 @@ var getDevices = function(manufacturer){
 		return devices[manufacturer];
 	}else{
 		for(manufacturer in devices){
+			console.log(manufacturer);
 			for(device in devices[manufacturer]){
-				device = devices[manufacturer][device];
+				device = devices[manufacturer][device][device];
+				console.log(device);
 				result[device.name] = device; 
 			}
 		}
@@ -45,18 +49,14 @@ exports.init = function(plugins, bot){
 	//bot.addCommand('changeDevice', '[<device>]', 'Changes device', USER_LEVEL_ADMIN);
 	bot.addCommand('removeDevice', '[<device>]', 'Removes device', USER_LEVEL_ADMIN);
 	// Devices
-	addDevice('samsung', 'crespo', 'GT-I9020', 'http://get.cm/?device=crespo');
-	addDevice('samsung', 'maguro', 'GT-I9250', 'http://get.cm/?device=maguro');
-	addDevice('samsung', 'toro', 'SCH-I515', 'http://get.cm/?device=toro');
-	addDevice('samsung', 'galaxys2', 'GT-I9100', 'http://get.cm/?device=galaxys2');
-	addDevice('samsung', 'galaxysmtd', 'GT-I9000', 'http://get.cm/?device=galaxysmtd');
-	addDevice('samsung', 'vibrantmtd', 'SGH-T959', 'http://get.cm/?device=vibrantmtd');
-	addDevice('samsung', 'captivatemtd', 'SGH-I897', 'http://get.cm/?device=captivatemtd');
-	addDevice('samsung', 'fascinatemtd', 'SCH-I500', 'http://get.cm/?device=fascinatemtd');
-	addDevice('samsung', 'galaxysbmtd', 'GT-I9000B', 'http://get.cm/?device=galaxysbmtd');
-	addDevice('samsung', 'mesmerizemtd', 'SCH-I500', 'http://get.cm/?device=mesmerizemtd');
-	addDevice('samsung', 'showcasemtd', 'SCH-I500', 'http://get.cm/?device=showcasemtd');
-	addDevice('samsung', 'i777', 'SGH-I777', 'http://get.cm/?device=i777');
+	db.devices.find({}, function(err, devices2){
+		if(err){
+			throw err;
+		}
+		delete devices['_id'];
+		devices = devices2 || {};
+	});
+
 	plugins.listen('CM', 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, level)){

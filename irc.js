@@ -94,7 +94,12 @@ IRC.prototype = {
 					// Get channel
 					if(rawResponse[2]){
 						var channel = rawResponse[2].replace(/^:/, '').trim();
-						passedVars['channel'] = channel;
+						// If it has # infront of it, it gotta be a channel
+						if(/(#(.*))/.exec(channel)){
+							passedVars['channel'] = channel;
+						}else{
+							passedVars['channel'] = passedVars['user'];
+						}
 					}
 					if(event == 'PRIVMSG'){
 						// Remove the 3 first parts because they dont 
