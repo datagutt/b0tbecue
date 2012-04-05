@@ -56,7 +56,7 @@ exports.init = function(plugins, bot){
 				}
 			break;
 			case 'ping':
-				IRC.message(args.channel, 'Version: '+bot.VERSION);
+				IRC.message(args.channel, 'Version: '+bot.VERSION + ', source at: https://github.com/datagutt/b0tbecue');
 			break;
 			case 'userlevel':
 				var user, level;
