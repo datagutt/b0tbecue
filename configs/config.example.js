@@ -11,6 +11,8 @@ config.bot = {
 	password: '',
 	/* For control plugin */
 	controlpw: 'password',
+	controlhost: '127.0.0.1',
+	controlport: 8080,
 	skynetpw: 'skynet'
 };
 config.db = {

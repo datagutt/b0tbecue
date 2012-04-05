@@ -1,6 +1,5 @@
 var WebSocketServer = require('websocket').server;
 var http = require('http'), fs = require('fs');
-var host = 'bot.blamesamsung.org', port = 8080;
 var Control = function(){
 
 };
@@ -67,6 +66,7 @@ Control.save = function(bot, data){
 	}
 }
 Control.start = function(bot){
+	var host = bot.config.controlhost, port = bot.config.controlport;
 	var server = http.createServer(function(request, response) {
 		var url = 'plugins/control/', plugins = [];
 		request.url = request.url.replace('/', '');
