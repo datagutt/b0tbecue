@@ -13,7 +13,8 @@ exports.init = function(plugins, bot){
 	plugins.listen('OP', 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		var message = args.message.replace(bot.config.prefix+args.command, '')
-			.replace(args.arguments[0], '');
+			.replace(args.arguments[0], '')
+			.trim();
 		if(!bot.isCommand(args.command, level)){
 			return;
 		}
