@@ -146,7 +146,7 @@ IRC.prototype = {
 	handlePing: function(data){
 		var server = data[0].split(":");
 		server = server[1].trim();
-		console.log('[PONG] '+server)
+		console.log('[PONG] '+server);
 		this.send('PONG', server);
 	},
 	fireEvent: function(event, passedVars){
@@ -208,6 +208,18 @@ IRC.prototype = {
 	},
 	unban: function(channel, user){
 		this.send('MODE',  channel + ' -b ' + user);
+	},
+	voice: function(channel, user){
+		this.send('MODE',  channel + ' +v ' + user);
+	},
+	unvoice: function(channel, user){
+		this.send('MODE',  channel + ' -v ' + user);
+	},
+	mute: function(channel, user){
+		this.send('MODE',  channel + ' +q ' + user);
+	},
+	unmute: function(channel, user){
+		this.send('MODE',  channel + ' -q ' + user);
 	},
 	message: function(target, message){
 		var self = this;
