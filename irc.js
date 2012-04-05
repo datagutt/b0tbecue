@@ -134,10 +134,9 @@ IRC.prototype = {
 							user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
 							// Make sure it ignores the name of the bot
 							if(user !== self.bot.config.nick){
-								passed_users[user] = user;
+								self.users[channel][user] = user;
 							}
 						});
-						this.users[channel] = passed_users;
 					}
 				if(event){
 					self.fireEvent(event, passedVars);
