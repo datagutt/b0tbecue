@@ -12,14 +12,14 @@ exports.init = function(plugins, bot){
 	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
+		var message = args.message.replace(bot.config.prefix+args.command, '')
+			.replace(args.arguments[0], '');
 		if(!bot.isCommand(args.command, level)){
 			return;
 		}
 		switch(args.command){
 			case 'say':
 				if(args.arguments && args.arguments[0]){
-					// Join all arguments to one message, but remove first argument
-					var message = args.arguments.join(' ').replace(args.arguments[0], '');
 					IRC.message(args.arguments[0], message);
 				}
 			break;
@@ -35,16 +35,14 @@ exports.init = function(plugins, bot){
 			break;
 			case 'kick':
 				if(args.arguments && args.arguments[0]){
-					var message = args.arguments.join(' ').replace(args.arguments[0], '');
 					IRC.kick(args.channel, args.arguments[0], message);
 				}
 			break;
 			case 'kickban':
 				if(args.arguments && args.arguments[0]){
-					var message = args.arguments.join(' ').replace(args.arguments[0], '');
 					IRC.ban(args.channel, args.arguments[0]);
 					// Get user from hostname
-					IRC.kick(args.channel, args.arguments[0].split('!')[0]. message);
+					IRC.kick(args.channel, args.arguments[0].split('!')[0], message);
 				}
 			break;
 			case 'unban':
