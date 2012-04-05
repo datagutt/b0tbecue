@@ -223,11 +223,14 @@ IRC.prototype = {
 	},
 	message: function(target, message){
 		var self = this;
-
-		var messages = message.split("\n");
-		[].forEach.call(messages, function(message){
-			self.send('PRIVMSG', target + ' :' + message);
-		});
+		if(typeof message === 'string' && message.indexOf("\n") != -1){
+			var messages = message.split("\n");
+			[].forEach.call(messages, function(message){
+				self.send('PRIVMSG', target + ' :' + message);
+			});
+		}else{
+			this.send('PRIVMSG', target + ' :' + message);
+		}
 	}
 };
 exports.IRC = IRC;

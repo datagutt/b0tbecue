@@ -72,6 +72,26 @@ exports.init = function(plugins, bot){
 					IRC.topic(args.channel, topic);
 				}
 			break;
+			case 'mute':
+				if(args.arguments && args.arguments[0]){
+					IRC.mute(args.channel, args.arguments[0]);
+				}
+			break;
+			case 'demute':
+				if(args.arguments && args.arguments[0]){
+					IRC.demute(args.channel, args.arguments[0]);
+				}
+			break;
+			case 'voice':
+				if(args.arguments && args.arguments[0]){
+					IRC.voice(args.channel, args.arguments[0]);
+				}
+			break;
+			case 'devoice':
+				if(args.arguments && args.arguments[0]){
+					IRC.devoice(args.channel, args.arguments[0]);
+				}
+			break;
 		}
 	});
 }
