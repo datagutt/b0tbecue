@@ -33,11 +33,15 @@ exports.init = function(plugins, bot){
 			case 'part':
 				if(args.arguments && args.arguments[0]){
 					IRC.part(args.arguments[0]);
+				}else{
+					IRC.part(args.channel);
 				}
 			break;
 			case 'kick':
 				if(args.arguments && args.arguments[0]){
 					IRC.kick(args.channel, args.arguments[0], message);
+				}else{
+					IRC.kick(args.channel, args.user, "")
 				}
 			break;
 			case 'kickban':
@@ -50,16 +54,22 @@ exports.init = function(plugins, bot){
 			case 'unban':
 				if(args.arguments && args.arguments[0]){
 					IRC.unban(args.channel, args.arguments[0]);
+				}else{
+					IRC.unban(args.channel, args.user);
 				}
 			break;
 			case 'op':
 				if(args.arguments && args.arguments[0]){
 					IRC.op(args.channel, args.arguments[0]);
+				}else{
+					IRC.op(args.channel, args.user);
 				}
 			break;
 			case 'deop':
 				if(args.arguments && args.arguments[0]){
 					IRC.deop(args.channel, args.arguments[0]);
+				}else{
+					IRC.op(args.channel, args.user);
 				}
 			break;
 			case 'nick':
@@ -77,21 +87,29 @@ exports.init = function(plugins, bot){
 			case 'mute':
 				if(args.arguments && args.arguments[0]){
 					IRC.mute(args.channel, args.arguments[0]);
+				}else{
+					IRC.mute(args.channel, args.user);
 				}
 			break;
-			case 'demute':
+			case 'unmute':
 				if(args.arguments && args.arguments[0]){
-					IRC.demute(args.channel, args.arguments[0]);
+					IRC.unmute(args.channel, args.arguments[0]);
+				}else{
+					IRC.unmute(args.channel, args.user);
 				}
 			break;
 			case 'voice':
 				if(args.arguments && args.arguments[0]){
 					IRC.voice(args.channel, args.arguments[0]);
+				}else{
+					IRC.voice(args.channel, args.user);
 				}
 			break;
 			case 'devoice':
 				if(args.arguments && args.arguments[0]){
 					IRC.devoice(args.channel, args.arguments[0]);
+				}else{
+					IRC.devoice(args.channel, args.user);
 				}
 			break;
 			case 'prefix':
