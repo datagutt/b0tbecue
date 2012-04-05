@@ -142,7 +142,7 @@ exports.init = function(plugins, bot){
 					});
 				}else{
 					msg = "";
-					for(admins in bot.config.admins){
+					for(admin in bot.config.admins){
 						msg += admin + ' ';
 					}
 					IRC.message(args.channel, 'Admins: ' + msg);
