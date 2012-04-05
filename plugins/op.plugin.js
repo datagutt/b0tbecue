@@ -1,3 +1,4 @@
+var config = {autoOP: true}
 exports.init = function(plugins, bot){
 	var self = this;
 	bot.addCommand('say', '[<channel>] [<message>]', 'Says message to channel', USER_LEVEL_ADMIN);
