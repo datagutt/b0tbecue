@@ -101,42 +101,48 @@ IRC.prototype = {
 							passedVars['channel'] = passedVars['user'];
 						}
 					}
-					if(event == 'PRIVMSG'){
-						// Remove the 3 first parts because they dont 
-						// contain a message, then join the values left
-						// and remove : infront to get a string
-						message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+					switch (event) {
+						case 'PRIVMSG':
+							// Remove the 3 first parts because they dont
+							// contain a message, then join the values left
+							// and remove : infront to get a string
+							message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
 
-						passedVars['message'] = message;
+							passedVars['message'] = message;
 
-						// get the first part of a message
-						first = message.split(' ')[0];
-						if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
-							// Remove the prefix from command
-							passedVars['command'] = first.replace(self.bot.config.prefix, '');
-							// Slice using the prefix length+command length
-							// so the command doesnt appear in the arguments list
-							// then split it so it becomes an array
-							passedVars['arguments'] = message.slice(first.length + 1).split(' ');
-						}
-					}
-					if(event == 'TOPIC'){
-						// Same as message parsing
-						var topic = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
-						passedVars['topic'] = topic;
-					}
-					// Userlist recieved when joining channel
-					if(event == '353'){
-						var users = rawResponse.slice(5);	
-						var channel = rawResponse[4], passed_users = [];
-						[].forEach.call(users, function(user){
-							// Remove modes and :
-							user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
-							// Make sure it ignores the name of the bot
-							if(user !== self.bot.config.nick){
-								self.users[channel][user] = user;
+							// get the first part of a message
+							first = message.split(' ')[0];
+							if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
+								// Remove the prefix from command
+								passedVars['command'] = first.replace(self.bot.config.prefix, '');
+								// Slice using the prefix length+command length
+								// so the command doesnt appear in the arguments list
+								// then split it so it becomes an array
+								passedVars['arguments'] = message.slice(first.length + 1).split(' ');
 							}
-						});
+							break;
+						case 'NICK':
+							nick = rawResponse.slice(2).join(' ').replace(/^:/, '').trim();
+							passedVars['nick'] = nick;
+							break;
+						case 'TOPIC':
+							// Same as message parsing
+							var topic = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+							passedVars['topic'] = topic;
+							break;
+						// Userlist recieved when joining channel
+						case '353':
+							var users = rawResponse.slice(5);
+							var channel = rawResponse[4], passed_users = [];
+							[].forEach.call(users, function(user){
+								// Remove modes and :
+								user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
+								// Make sure it ignores the name of the bot
+								if(user !== self.bot.config.nick){
+									self.users[channel][user] = user;
+								}
+							});
+							break;
 					}
 				if(event){
 					self.fireEvent(event, passedVars);
@@ -160,6 +166,13 @@ IRC.prototype = {
 			case 'PART':
 				delete this.users[passedVars.channel][passedVars.user];	
 			break;
+			case 'NICK':
+				var self = this;
+				[].forEach.call(this.users, function(channel){
+					self.users[channel][passedVars['nick']] = passedVars['nick'];
+					delete self.users[channel][passedVars['user']];
+				});
+				break;
 			case 'PRIVMSG':
 				if(passedVars['command']){
 					event = 'command';

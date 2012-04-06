@@ -25,21 +25,22 @@ function log(content, channel, format){
 	var folder = 'plugins/logs/';
 	var filename = folder + channel + '-' + date + '.txt';
 	var original_content = content;
-	if(!logged[channel]){
-		logged[channel] = [];
-	}
-	if(logged && !logged[channel][date]){
-		content = 'Started logging at: ' + date + '\n' + content;
-		logged[channel][date] = date;
-	}
-	content += '\n';
-	fs.appendFile(filename, content, function(err) {
-		if(err) {
-			throw err;
-		}else{
-			console.log((format ? format : '') + original_content + Format.RESET);
+	if(channel){
+		if(!logged[channel]){
+			logged[channel] = [];
 		}
-	}); 
+		if(logged && !logged[channel][date]){
+			content = 'Started logging at: ' + date + '\n' + content;
+			logged[channel][date] = date;
+		}
+		content += '\n';
+		fs.appendFile(filename, content, function(err) {
+			if(err) {
+				throw err;
+			}
+		});
+	}
+	console.log((format ? format : '') + original_content + Format.RESET);
 }
 exports.init = function(plugins, bot){
 	bot.addCommand('log', 'on/off [channel]', 'Enables/disables logging', USER_LEVEL_OWNER);
@@ -89,5 +90,8 @@ exports.init = function(plugins, bot){
 	});
 	plugins.listen('Log', 'part', function(args){
 		log('[PART] ['+args.channel+'] '+args.user, args.channel, Color.CYAN);
+	});
+	plugins.listen('Log', 'nick', function(args){
+		log('[NICK] '+args.user+' changed nick to '+args.nick, undefined, Color.MAGENTA);
 	});
 };
