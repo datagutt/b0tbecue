@@ -23,6 +23,9 @@ var responses = [
 exports.init = function(plugins, bot){
 	var l = responses.length;
 	bot.addCommand('eightball', '[<question>]', 'Answers your question', USER_LEVEL_GLOBAL);
+	// Alternative form, make it hidden so
+	// isCommand wont say that the command doesnt exist
+	bot.addCommand('8ball', '[<question>]', 'Answers your question', USER_LEVEL_GLOBAL, true);
 	plugins.listen(this, 'command', function(args){	
 		switch(args.command){
 			case 'eightball':
