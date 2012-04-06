@@ -95,7 +95,7 @@ exports.init = function(plugins, bot){
 		log('[KICK] ['+args.channel+'] '+args.user+' kicked '+args.kicked+' ('+args.message+')', args.channel, Color.RED);
 	});
 	plugins.listen(this, 'mode', function(args){
-		log('[MODE] ['+args.channel+'] '+args.user+' set mode '+args.mode+' on '+args.target, args.channel, Color.GREEN);
+		log('[MODE] ['+args.channel+'] '+args.user+' set mode '+args.mode+' on '+args.target, args.channel, Color.BLUE);
 	});
 	plugins.listen(this, 'nick', function(args){
 		log('[NICK] '+args.user+' changed nick to '+args.nick, undefined, Color.YELLOW);
