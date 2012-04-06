@@ -46,7 +46,7 @@ exports.init = function(plugins, bot){
 	plugins.listen('Log', 'topic', function(args){
 		log('[TOPIC] '+args.topic, args.channel, Color.MAGENTA);
 	});
-	plugins.listen('Log', 'command', function(args){
+	plugins.listen(this, 'command', function(args){
 		log('[COM] ['+args.channel+'] '+args.user+' ran command: '+args.command, args.channel, Format.BOLD + Color.RED);
 		if(args.command == 'log'){
 			var level = bot.getUserLevel(args.user, args.host);
@@ -81,13 +81,13 @@ exports.init = function(plugins, bot){
 			}
 		}
 	});
-	plugins.listen('Log', 'message', function(args){
+	plugins.listen(this, 'message', function(args){
 		log('[MSG] ['+args.channel+'] '+args.user+' said: '+args.message, args.channel, Color.GREEN);
 	});
-	plugins.listen('Log', 'join', function(args){
+	plugins.listen(this, 'join', function(args){
 		log('[JOIN] ['+args.channel+'] '+args.user, args.channel, Color.CYAN);
 	});
-	plugins.listen('Log', 'part', function(args){
+	plugins.listen(this, 'part', function(args){
 		log('[PART] ['+args.channel+'] '+args.user, args.channel, Color.CYAN);
 	});
 };

@@ -26,7 +26,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('owners', '<type>', 'Shows owners', USER_LEVEL_MOD);
 	bot.addCommand('admins', '<type>', 'Shows admins', USER_LEVEL_MOD);
 	bot.addCommand('mods', '<type>', 'Shows mods', USER_LEVEL_MOD);
-	plugins.listen('Base', 'command', function(args){	
+	plugins.listen(this, 'command', function(args){	
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, USER_LEVEL_OWNER)){
 			IRC.message(args.channel, args.user + ': Command doesnt not exist!');
