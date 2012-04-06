@@ -24,7 +24,7 @@ var Bot = function(config){
 		if(err){
 			throw err;
 		}else if(!levels){
-			console.log('No levels found, you need to run install.js first!');
+			console.log('No levels found, run "install.js user host"');
 			process.exit(0);
 		}else{
 			levels.forEach(function(level){
@@ -107,7 +107,6 @@ Bot.prototype = {
 		}
 	},
 	run: function(){
-		console.log('Connecting to '+IRC.config.server+':'+IRC.config.port);
 		IRC.connect(IRC.config.server, IRC.config.port);
 	}
 };

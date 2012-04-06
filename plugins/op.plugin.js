@@ -56,7 +56,7 @@ exports.init = function(plugins, bot){
 				if(args.arguments && args.arguments[0]){
 					IRC.kick(args.channel, args.arguments[0], message);
 				}else{
-					IRC.kick(args.channel, args.user, "")
+					IRC.kick(args.channel, args.user, '')
 				}
 			break;
 			case 'kickban':
