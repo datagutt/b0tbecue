@@ -130,7 +130,7 @@ IRC.prototype = {
 					passedVars['message'] = message;
 					// get the first part of a message
 					first = message.split(' ')[0];
-					if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
+					if(self.bot.config.prefix && first.indexOf(self.bot.config.prefix) == 0){
 						// Remove the prefix from command
 						passedVars['command'] = first.replace(self.bot.config.prefix, '');
 						// Slice using the command length
