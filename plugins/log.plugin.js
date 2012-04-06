@@ -30,7 +30,7 @@ function log(content, channel, format){
 	}
 	if(logged && !logged[channel][date]){
 		content = 'Started logging at: ' + date + '\n' + content;
-		logged[date] = date;
+		logged[channel][date] = date;
 	}
 	content += '\n';
 	fs.appendFile(filename, content, function(err) {
