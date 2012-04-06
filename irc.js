@@ -24,6 +24,9 @@ IRC.prototype = {
 		var bot = this.bot;
 		var socket = this.socket;
 		var self = this;
+
+		var backlog = '';
+
 		socket.on('connect', function() {
 			console.log('Connected to '+server+':'+port);
 			setTimeout(function(){
@@ -38,9 +41,28 @@ IRC.prototype = {
 				});
 			}, 1000);
 		});
-		socket.on('data', function(data){
-			self.parse(data, self);
+
+		socket.on('data', function (data) {
+			backlog += data;
+			var n = backlog.indexOf('\n');
+			// got a \n? emit one or more 'line' events
+			while (~n) {
+				socket.emit('line', backlog.substring(0, n));
+				backlog = backlog.substring(n + 1);
+				n = backlog.indexOf('\n');
+			}
 		});
+
+		socket.on('end', function () {
+			if (backlog) {
+				socket.emit('line', backlog);
+			}
+		});
+
+		socket.on('line', function(line){
+			self.parse(line, self);
+		});
+
 		socket.setEncoding('ascii');
 		socket.setNoDelay();
 		console.log('Connecting to '+config.server+':'+config.port);
@@ -66,87 +88,95 @@ IRC.prototype = {
 	},
 	parse: function(data, self){
 		// IRC seems to put a : infront of lines, remove that
-		var data = data.toString().replace(/^:/, '');
-		var response = data.split('\n'), 
-			rawResponse, 
+		var data = data.toString().replace(/^:/, '').trim();
+		var rawResponse,
 			hostname, 
 			message, 
 			event;
 		// Pings should later on be handled in fireEvent
 		if(data.match('^PING')){
-			this.handlePing(response);
+			this.handlePing(data);
 		}else{
 			var passedVars = {};
-			for (i = response.length; i--;){
-					// Turn the response into an array
-					var rawResponse = response[i].split(' ');
-					// Get host and user using regex
-					var hostmask = /(.*)!((.*)@(.*))/.exec(rawResponse[0]);
-					if(hostmask && hostmask[1] && hostmask[2]){
-						// Some times, theres a : infront of user
-						passedVars['user'] = hostmask[1].replace(/^:/, '');
-						passedVars['host'] = hostmask[2];
-					}
-					// Get event
-					if(rawResponse[1]){
-						passedVars['event'] = event = rawResponse[1];
-					}
-					// Get channel
-					if(rawResponse[2]){
-						var channel = rawResponse[2].replace(/^:/, '').trim();
-						// If it has # infront of it, it gotta be a channel
-						if(/(#(.*))/.exec(channel)){
-							passedVars['channel'] = channel;
-						}else{
-							passedVars['channel'] = passedVars['user'];
-						}
-					}
-					if(event == 'PRIVMSG'){
-						// Remove the 3 first parts because they dont 
-						// contain a message, then join the values left
-						// and remove : infront to get a string
-						message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
-
-						passedVars['message'] = message;
-
-						// get the first part of a message
-						first = message.split(' ')[0];
-						if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
-							// Remove the prefix from command
-							passedVars['command'] = first.replace(self.bot.config.prefix, '');
-							// Slice using the prefix length+command length
-							// so the command doesnt appear in the arguments list
-							// then split it so it becomes an array
-							passedVars['arguments'] = message.slice(first.length + 1).split(' ');
-						}
-					}
-					if(event == 'TOPIC'){
-						// Same as message parsing
-						var topic = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
-						passedVars['topic'] = topic;
-					}
-					// Userlist recieved when joining channel
-					if(event == '353'){
-						var users = rawResponse.slice(5);	
-						var channel = rawResponse[4], passed_users = [];
-						[].forEach.call(users, function(user){
-							// Remove modes and :
-							user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
-							// Make sure it ignores the name of the bot
-							if(user !== self.bot.config.nick){
-								self.users[channel][user] = user;
-							}
-						});
-					}
-				if(event){
-					self.fireEvent(event, passedVars);
+			// Turn the response into an array
+			var rawResponse = data.split(' ');
+			// Get host and user using regex
+			var hostmask = /(.*)!((.*)@(.*))/.exec(rawResponse[0]);
+			if(hostmask && hostmask[1] && hostmask[2]){
+				// Some times, theres a : infront of user
+				passedVars['user'] = hostmask[1].replace(/^:/, '');
+				passedVars['host'] = hostmask[2];
+			}
+			// Get event
+			if(rawResponse[1]){
+				passedVars['event'] = event = rawResponse[1];
+			}
+			// Get channel
+			if(rawResponse[2]){
+				var channel = rawResponse[2].replace(/^:/, '').trim();
+				// If it has # infront of it, it gotta be a channel
+				if(/(#(.*))/.exec(channel)){
+					passedVars['channel'] = channel;
+				}else{
+					passedVars['channel'] = passedVars['user'];
 				}
+			}
+			switch (event) {
+				case 'PRIVMSG':
+					// Remove the 3 first parts because they dont
+					// contain a message, then join the values left
+					// and remove : infront to get a string
+					message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+					passedVars['message'] = message;
+					// get the first part of a message
+					first = message.split(' ')[0];
+					if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
+						// Remove the prefix from command
+						passedVars['command'] = first.replace(self.bot.config.prefix, '');
+						// Slice using the prefix length+command length
+						// so the command doesnt appear in the arguments list
+						// then split it so it becomes an array
+						passedVars['arguments'] = message.slice(first.length + 1).split(' ');
+					}
+					break;
+				case 'KICK':
+					// user kicked
+					var kicked = rawResponse[3];
+					passedVars['kicked'] = kicked;
+					// kick message
+					message = rawResponse.slice(4).join(' ').replace(/^:/, '').trim();
+					passedVars['message'] = message;
+					break;
+				case 'NICK':
+					var nick = rawResponse.slice(2).join(' ').replace(/^:/, '').trim();
+					passedVars['nick'] = nick;
+					break;
+				case 'TOPIC':
+					// Same as message parsing
+					var topic = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+					passedVars['topic'] = topic;
+					break;
+				// Userlist recieved when joining channel
+				case '353':
+					var users = rawResponse.slice(5);
+					var channel = rawResponse[4], passed_users = [];
+					[].forEach.call(users, function(user){
+						// Remove modes and :
+						user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
+						// Make sure it ignores the name of the bot
+						if(user !== self.bot.config.nick){
+							self.users[channel][user] = user;
+						}
+					});
+					break;
+			}
+			if(event){
+				self.fireEvent(event, passedVars);
 			}
 		}
 	},
 	handlePing: function(data){
-		var server = data[0].split(':');
-		server = server[1].trim();
+		var server = data.split(':')[1].trim();
 		this.send('PONG', server);
 	},
 	fireEvent: function(event, passedVars){
@@ -160,6 +190,16 @@ IRC.prototype = {
 			case 'PART':
 				delete this.users[passedVars.channel][passedVars.user];	
 			break;
+			case 'KICK':
+				delete this.users[passedVars.channel][passedVars.kicked];
+			break;
+			case 'NICK':
+				var self = this;
+				[].forEach.call(this.users, function(channel){
+					self.users[channel][passedVars['nick']] = passedVars['nick'];
+					delete self.users[channel][passedVars['user']];
+				});
+				break;
 			case 'PRIVMSG':
 				if(passedVars['command']){
 					event = 'command';
