@@ -7,8 +7,9 @@ Dependencies
 - MongoDB (For saving the level of users)
 - Control plugin
 	- Websocket
+
 Plugins
--------
+--------
 - Base
 - CM (Made for #teamhacksung-support)
 - Control (Lets you easily control the bot using a web interface)
