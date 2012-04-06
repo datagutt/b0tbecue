@@ -158,7 +158,7 @@ IRC.prototype = {
 				}
 			break;
 			case 'PART':
-				this.users[passedVars.channel][passedVars.user] = undefined;
+				delete this.users[passedVars.channel][passedVars.user];	
 			break;
 			case 'PRIVMSG':
 				if(passedVars['command']){
@@ -181,8 +181,8 @@ IRC.prototype = {
 		this.send('JOIN', channel);
 	},
 	part: function(channel){
-		this.channels[channel] = undefined;
-		this.users[channel] = undefined;
+		delete this.channels[channel];
+		delete this.users[channel];
 		this.send('PART', channel);
 	},
 	nick: function(nick){
