@@ -43,6 +43,7 @@ IRC.prototype = {
 		});
 		socket.setEncoding('ascii');
 		socket.setNoDelay();
+		console.log('Connecting to '+config.server+':'+config.port);
 		socket.connect(port, server);
 	},
 	send: function(action, message){
@@ -170,7 +171,7 @@ IRC.prototype = {
 		this.plugins.fire(event.toLowerCase(), passedVars);
 	},
 	disconnect: function(){
-		console.log('Disconnected.');
+		console.log('Disconnected from '+this.config.server);
 		this.socket.end();
 	},
 	/* Channel methods */
@@ -197,10 +198,7 @@ IRC.prototype = {
 		this.send('MODE', channel + ' -o ' + user);
 	},
 	kick: function(channel, user, message){
-		if(!message){
-			message = 'Your behavior is not conducive to the desired environment.';
-		}
-		this.send('KICK', channel + ' ' + user + ' :' + message);
+		this.send('KICK', channel + ' ' + user + (message ? ' :' + message : ''));
 	},
 	ban: function(channel, user){
 		this.send('MODE',  channel + ' +b ' + user);
