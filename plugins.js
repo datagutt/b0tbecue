@@ -1,6 +1,7 @@
 var Plugins = function(bot){
 	this.bot = bot;
 	this.hooks = {};
+	this.sets = {};
 	this.plugins = {};
 };
 Plugins.prototype = {
@@ -21,10 +22,22 @@ Plugins.prototype = {
 		return !!(plugin && this.plugins[plugin] && this.plugins[plugin][func] && typeof this.plugins[plugin][func] == 'function');
 	},
 	listen: function(plugin, event, func){
-		if(typeof this.hooks[plugin.name] == 'undefined'){
+		if(this.hooks[plugin.name] == undefined){
 			this.hooks[plugin.name] = [];
 		}
 		this.hooks[plugin.name][event] = func;
+	},
+	registerSet: function(plugin, name){
+		if(this.sets[name] == undefined){
+			this.sets[name] = [];
+		}
+		this.sets[name][plugin.name] = plugin;
+	},
+	handleSet: function(){
+		for(set in sets){
+			if(sets[set]){
+			}
+		}
 	},
 	fire: function(event, passedVars){
 		var hooks = this.hooks;
