@@ -14,7 +14,6 @@ var bash = function(channel, id){
 			console.log(data);
 			var parsed = data.match(/<p class=\"qt\">(.*?)<\/p>/);
 			quote = parsed ? parsed[1] : '';
-			console.log(parsed);
 			if(quote){
 				quote = quote.replace(/&quot;+/g, '"');
 				quote = quote.replace(/&lt;+/g, '<');
