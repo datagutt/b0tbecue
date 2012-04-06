@@ -97,4 +97,8 @@ exports.init = function(plugins, bot){
 	plugins.listen(this, 'nick', function(args){
 		log('[NICK] '+args.user+' changed nick to '+args.nick, undefined, Color.YELLOW);
 	});
+	
+	plugins.listen(this, 'notice', function(args){
+		log('[NOTICE] '+args.user+' said: '+args.message, undefined,  Format.BOLD + Color.GREEN);
+	});
 };

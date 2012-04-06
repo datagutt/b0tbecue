@@ -106,6 +106,9 @@ IRC.prototype = {
 				// Some times, theres a : infront of user
 				passedVars['user'] = hostmask[1].replace(/^:/, '');
 				passedVars['host'] = hostmask[2];
+			}else{
+				// When the user is a server, theres is no hostmask
+				passedVars['user'] = rawResponse[0].replace(/^:/, '');
 			}
 			// Get event
 			if(rawResponse[1]){
@@ -118,7 +121,9 @@ IRC.prototype = {
 				if(/(#(.*))/.exec(channel)){
 					passedVars['channel'] = channel;
 				}else{
-					passedVars['channel'] = passedVars['user'];
+					if(passedVars['user']){
+						passedVars['channel'] = passedVars['user'];
+					}
 				}
 			}
 			switch (event) {
@@ -168,6 +173,23 @@ IRC.prototype = {
 							self.users[channel][user] = user;
 						}
 					});
+					break;
+				case 'MODE':
+					if(rawResponse[3]){
+						passedVars['mode'] = rawResponse[3];
+					}
+					if(rawResponse[4]){
+						passedVars['target'] = rawResponse[4];
+					}
+					// This is a format we dont support (inconsistency, anyone?)
+					if(channel == this.bot.config.nick){
+						return;
+					}
+					break;
+				case 'NOTICE':
+					// Same as message parsing
+					var message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+					passedVars['message'] = message;
 					break;
 			}
 			if(event){
