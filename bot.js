@@ -39,9 +39,7 @@ var Bot = function(config){
 	this.config = config.bot;
 	this.commands = {};
 	IRC.config = config.irc;
-	Plugins.load(config.bot.plugins || {
-		'Base': 'base.plugin.js'
-	});
+	Plugins.load(config.bot.plugins);
 };
 Bot.prototype = {
 	addCommand: function(name, usage, description, level, hidden){

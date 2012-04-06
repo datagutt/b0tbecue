@@ -33,7 +33,7 @@ google = function(channel, keywords){
 }
 exports.init = function(plugins, bot){
 	bot.addCommand('google', '[<keywords>]', 'Google keyword', USER_LEVEL_GLOBAL);
-	plugins.listen('Google', 'command', function(args){	
+	plugins.listen(this, 'command', function(args){	
 		switch(args.command){
 			case 'google':
 			if(args && args.arguments[0]){

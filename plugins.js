@@ -6,11 +6,11 @@ var Plugins = function(bot){
 Plugins.prototype = {
 	load: function(plugins){
 		for(plugin in plugins){
-			var file = plugins[plugin].file;
-			var tempPlugin = require('./plugins/'+file);
+			var tempPlugin = require('./plugins/'+plugin);
 			if(typeof tempPlugin == 'object'){
-				if(plugins[plugin].config){
-					tempPlugin.config = plugins[plugin].config;
+				if(plugins[plugin]){
+					tempPlugin.name = plugin;
+					tempPlugin.config = plugins[plugin];
 				}
 				tempPlugin.init(this, this.bot);
 			}
@@ -21,11 +21,12 @@ Plugins.prototype = {
 		return !!(plugin && this.plugins[plugin] && this.plugins[plugin][func] && typeof this.plugins[plugin][func] == 'function');
 	},
 	listen: function(plugin, event, func){
-		if(typeof this.hooks[plugin] == 'undefined'){
-			this.hooks[plugin] = [];
+		if(typeof this.hooks[plugin.name] == 'undefined'){
+			this.hooks[plugin.name] = [];
 		}
-		this.hooks[plugin][event] = func;
+		this.hooks[plugin.name][event] = func;
 	},
+	}
 	fire: function(event, passedVars){
 		var hooks = this.hooks;
 		var self = this;

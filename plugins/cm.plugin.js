@@ -57,7 +57,7 @@ exports.init = function(plugins, bot){
 	addDevice('samsung', 'mesmerizemtd', 'SCH-I500', 'http://get.cm/?device=mesmerizemtd');
 	addDevice('samsung', 'showcasemtd', 'SCH-I500', 'http://get.cm/?device=showcasemtd');
 	addDevice('samsung', 'i777', 'SGH-I777', 'http://get.cm/?device=i777');
-	plugins.listen('CM', 'command', function(args){
+	plugins.listen(this, 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, level)){
 			return;
