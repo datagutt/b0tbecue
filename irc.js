@@ -73,7 +73,6 @@ IRC.prototype = {
 			event;
 		// Pings should later on be handled in fireEvent
 		if(data.match('^PING')){
-			console.log('[PING] Received');
 			this.handlePing(response);
 		}else{
 			var passedVars = {};
@@ -147,7 +146,6 @@ IRC.prototype = {
 	handlePing: function(data){
 		var server = data[0].split(':');
 		server = server[1].trim();
-		console.log('[PONG] '+server);
 		this.send('PONG', server);
 	},
 	fireEvent: function(event, passedVars){
