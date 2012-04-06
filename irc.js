@@ -107,7 +107,6 @@ IRC.prototype = {
 							// contain a message, then join the values left
 							// and remove : infront to get a string
 							message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
-
 							passedVars['message'] = message;
 
 							// get the first part of a message
@@ -121,8 +120,17 @@ IRC.prototype = {
 								passedVars['arguments'] = message.slice(first.length + 1).split(' ');
 							}
 							break;
+						case 'KICK':
+							// user kicked
+							var kicked = rawResponse[3];
+							passedVars['kicked'] = kicked;
+
+							// kick message
+							message = rawResponse.slice(4).join(' ').replace(/^:/, '').trim();
+							passedVars['message'] = message;
+							break;
 						case 'NICK':
-							nick = rawResponse.slice(2).join(' ').replace(/^:/, '').trim();
+							var nick = rawResponse.slice(2).join(' ').replace(/^:/, '').trim();
 							passedVars['nick'] = nick;
 							break;
 						case 'TOPIC':
@@ -165,6 +173,9 @@ IRC.prototype = {
 			break;
 			case 'PART':
 				delete this.users[passedVars.channel][passedVars.user];	
+			break;
+			case 'KICK':
+				delete this.users[passedVars.channel][passedVars.kicked];
 			break;
 			case 'NICK':
 				var self = this;

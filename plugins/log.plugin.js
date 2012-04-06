@@ -91,7 +91,10 @@ exports.init = function(plugins, bot){
 	plugins.listen(this, 'part', function(args){
 		log('[PART] ['+args.channel+'] '+args.user, args.channel, Color.CYAN);
 	});
-	plugins.listen('Log', 'nick', function(args){
-		log('[NICK] '+args.user+' changed nick to '+args.nick, undefined, Color.MAGENTA);
+	plugins.listen(this, 'kick', function(args){
+		log('[KICK] ['+args.channel+'] '+args.user+' kicked '+args.kicked+' ('+args.message+')', args.channel, Color.RED);
+	});
+	plugins.listen(this, 'nick', function(args){
+		log('[NICK] '+args.user+' changed nick to '+args.nick, undefined, Color.YELLOW);
 	});
 };
