@@ -8,7 +8,7 @@ Control.save = function(bot, data){
 		switch(data.action){
 			case 'stop':
 				IRC.disconnect();
-				console.log('Exiting bot');
+				console.log('Stopping bot');
 				process.exit(0);
 			break;
 			case 'restart':
@@ -124,7 +124,7 @@ Control.start = function(self, bot){
 		connection.on('message', function(message) {
 			var data = JSON.parse(message.utf8Data);
 			if (message.type === 'utf8') {
-				if(data.controlpw && data.controlpw == config.password){
+				if(data.controlpw && data.controlpw == self.config.password){
 					Control.save(bot, data);
 				}else{
 					connection.send('wrongpw');
