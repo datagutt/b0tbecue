@@ -133,7 +133,7 @@ IRC.prototype = {
 					if(self.bot.config.prefix && first.match(self.bot.config.prefix)){
 						// Remove the prefix from command
 						passedVars['command'] = first.replace(self.bot.config.prefix, '');
-						// Slice using the prefix length+command length
+						// Slice using the command length
 						// so the command doesnt appear in the arguments list
 						// then split it so it becomes an array
 						passedVars['arguments'] = message.slice(first.length + 1).split(' ');
@@ -159,7 +159,7 @@ IRC.prototype = {
 				// Userlist recieved when joining channel
 				case '353':
 					var users = rawResponse.slice(5);
-					var channel = rawResponse[4], passed_users = [];
+					var channel = rawResponse[4];
 					[].forEach.call(users, function(user){
 						// Remove modes and :
 						user = user.replace(/^[^A-}]+/, '').replace(/^:/, '').trim();
