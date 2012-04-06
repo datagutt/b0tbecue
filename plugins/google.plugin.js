@@ -40,7 +40,7 @@ exports.init = function(plugins, bot){
 				var keywords = args.message
 					.replace(bot.config.prefix+args.command, '')
 					.trim()
-					.replace(' ', '+');
+					.replace(/ /g, '+');
 				google(args.channel, keywords);
 			}
 			break;
