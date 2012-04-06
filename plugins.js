@@ -26,7 +26,6 @@ Plugins.prototype = {
 		}
 		this.hooks[plugin.name][event] = func;
 	},
-	}
 	fire: function(event, passedVars){
 		var hooks = this.hooks;
 		var self = this;
