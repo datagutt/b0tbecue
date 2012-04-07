@@ -11,6 +11,7 @@ exports.USER_LEVEL_MOD = USER_LEVEL_MOD = 3;
 exports.USER_LEVEL_ADMIN = USER_LEVEL_ADMIN = 4;
 exports.USER_LEVEL_OWNER = USER_LEVEL_OWNER = 5;
 var Bot = function(config){
+	this.startTime = new Date().getTime();
 	// Init IRC and Plugins, set config variables
 	Plugins = exports.Plugins = new Plugins(this);
 	IRC = exports.IRC = new IRC(this, Plugins);
