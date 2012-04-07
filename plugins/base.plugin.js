@@ -13,19 +13,23 @@ var helpCommand = function(bot, args){
 	for(command in bot.commands){
 		var com = bot.commands[command];
 		if(!com.hidden && bot.getUserLevel(args.user, args.host) >= com.level){
-			message += bot.config.prefix + command + ' ';
+			if(com.main || (args.arguments && args.arguments[0] == 'commands')){
+				message += bot.config.prefix + command + ' ';
+			}
 		}
 	}
 	IRC.message(args.channel, 'Commands: ' + message);
 };
 exports.init = function(plugins, bot){
-	bot.addCommand('help', '[<command>]', 'Shows commands and how to use them', USER_LEVEL_GLOBAL);
+	bot.addCommand('help', '[commands] [<command>]', 'Shows commands and how to use them', USER_LEVEL_GLOBAL, false, true);
 	bot.addCommand('userlevel', '[<user>] [<host>]', 'Shows the level of the user', USER_LEVEL_GLOBAL);
 	bot.addCommand('ping', '', 'Shows some info about the bot', USER_LEVEL_GLOBAL, true);
-	bot.addCommand('eval', '<code>', 'Executes the code', USER_LEVEL_OWNER);
+	bot.addCommand('eval', '<code>', 'Executes the code', USER_LEVEL_OWNER, false);
 	bot.addCommand('owners', '<type>', 'Shows owners', USER_LEVEL_MOD);
 	bot.addCommand('admins', '<type>', 'Shows admins', USER_LEVEL_MOD);
 	bot.addCommand('mods', '<type>', 'Shows mods', USER_LEVEL_MOD);
+	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
+	bot.addCommand('prefix', '[<prefix>]', 'Changes prefix of bot', USER_LEVEL_OWNER);
 	plugins.listen(this, 'command', function(args){	
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, USER_LEVEL_OWNER)){
@@ -38,7 +42,7 @@ exports.init = function(plugins, bot){
 		}
 		switch(args.command){
 			case 'help':
-				if(args.arguments && args.arguments[0]){
+				if(args.arguments && args.arguments[0] && args.arguments[0] !== 'commands'){
 					var com = bot.commands[args.arguments[0]], usage;
 					if(com && com.name){
 						if(com.usage){
@@ -175,6 +179,17 @@ exports.init = function(plugins, bot){
 						msg += mod + ' ';
 					}
 					IRC.message(args.channel, 'Mods: ' + msg);
+				}
+			break;
+			case 'nick':
+				if(args.arguments && args.arguments[0]){
+					IRC.nick(args.arguments[0]);
+				}
+			break;
+			case 'prefix':
+				if(args.arguments && args.arguments[0]){
+					bot.config.prefix = args.arguments[0];
+					IRC.message(args.channel, 'Prefix changed to ' + bot.config.prefix);
 				}
 			break;
 		}

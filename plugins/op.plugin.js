@@ -2,21 +2,18 @@ var config = {autoOP: true}
 exports.init = function(plugins, bot){
 	var self = this;
 	bot.addCommand('say', '[<channel>] [<message>]', 'Says message to channel', USER_LEVEL_ADMIN);
-	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
-	bot.addCommand('join', '[<channel>]', 'Joins channel', USER_LEVEL_ADMIN);
-	bot.addCommand('part', '[<channel>]', 'Parts channel', USER_LEVEL_ADMIN);
-	bot.addCommand('kick', '[<user>] [<message>]', 'Kicks user from channel', USER_LEVEL_MOD);
-	bot.addCommand('kickban', '[<user>] [<message>]', 'Kick and bans user from channel', USER_LEVEL_MOD);
-	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN);
-	bot.addCommand('op', '[<user>]', 'Gives operator status to user', USER_LEVEL_MOD);
-	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD);
-	bot.addCommand('voice', '[<user>]', 'Gives voice status to user', USER_LEVEL_MOD);
-	bot.addCommand('devoice', '[<user>]', 'Remove voice status from user', USER_LEVEL_MOD);
-	bot.addCommand('mute', '[<user>]', 'Mutes user', USER_LEVEL_MOD);
-	bot.addCommand('unmute', '[<user>]', 'Unmutes user', USER_LEVEL_MOD);
+	bot.addCommand('join', '[<channel>]', 'Joins channel', USER_LEVEL_ADMIN, false, true);
+	bot.addCommand('part', '[<channel>]', 'Parts channel', USER_LEVEL_ADMIN, false, true);
+	bot.addCommand('kick', '[<user>] [<message>]', 'Kicks user from channel', USER_LEVEL_MOD, false, true);
+	bot.addCommand('kickban', '[<user>] [<message>]', 'Kick and bans user from channel', USER_LEVEL_MOD, false, true);
+	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN, false, true);
+	bot.addCommand('op', '[<user>]', 'Gives operator status to user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('voice', '[<user>]', 'Gives voice status to user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('devoice', '[<user>]', 'Remove voice status from user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('mute', '[<user>]', 'Mutes user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('unmute', '[<user>]', 'Unmutes user', USER_LEVEL_MOD, false, true);
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
-	bot.addCommand('nick', '[<nick>]', 'Changes nick of bot', USER_LEVEL_OWNER);
-	bot.addCommand('prefix', '[<prefix>]', 'Changes prefix of bot', USER_LEVEL_OWNER);
 	bot.addCommand('autoOP', '[on|off]', 'AutoOP on/off', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'join', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
@@ -87,11 +84,6 @@ exports.init = function(plugins, bot){
 					IRC.op(args.channel, args.user);
 				}
 			break;
-			case 'nick':
-				if(args.arguments && args.arguments[0]){
-					IRC.nick(args.arguments[0]);
-				}
-			break;
 			case 'topic':
 				if(args.arguments && args.arguments[0]){
 					// Join all arguments to one message
@@ -125,12 +117,6 @@ exports.init = function(plugins, bot){
 					IRC.devoice(args.channel, args.arguments[0]);
 				}else{
 					IRC.devoice(args.channel, args.user);
-				}
-			break;
-			case 'prefix':
-				if(args.arguments && args.arguments[0]){
-					bot.config.prefix = args.arguments[0];
-					IRC.message(args.channel, 'Prefix changed to ' + bot.config.prefix);
 				}
 			break;
 			case 'autoOP':

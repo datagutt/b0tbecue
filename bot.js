@@ -42,7 +42,7 @@ var Bot = function(config){
 	Plugins.load(config.bot.plugins);
 };
 Bot.prototype = {
-	addCommand: function(name, usage, description, level, hidden){
+	addCommand: function(name, usage, description, level, hidden, main){
 		if(this.commands){
 			if(!this.commands[name]){
 				this.commands[name] = {};
@@ -51,6 +51,7 @@ Bot.prototype = {
 				this.commands[name]['description'] = description;
 				this.commands[name]['level'] = level;
 				this.commands[name]['hidden'] = !!hidden;
+				this.commands[name]['main'] = !!main;
 			}
 		}
 	},
