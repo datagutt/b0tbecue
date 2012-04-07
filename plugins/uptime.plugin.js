@@ -21,8 +21,8 @@ var parse = function(uptime){
 	return uptime;
 }
 var uptime = function(bot, channel){
-	var parsed = (new Date().getTime() - bot.startTime) / 1000;
-	IRC.message(channel, 'Bot has been online for: ' + parse(parsed));
+	var time = (new Date().getTime() - bot.startTime) / 1000;
+	IRC.message(channel, 'Bot has been online for: ' + parse(time));
 }
 exports.init = function(plugins, bot){
 	bot.addCommand('uptime', '', 'Shows uptime of bot', USER_LEVEL_GLOBAL, true);
