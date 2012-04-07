@@ -13,6 +13,7 @@ IRC.prototype = {
 	socket: new net.Socket(),
 	channels: [],
 	users: [],
+	hooks: {},
 	config: {
 		server: 'irc.freenode.net',
 		port: 6667,
@@ -174,6 +175,17 @@ IRC.prototype = {
 						}
 					});
 					break;
+				// Userhost
+				case '302':
+					message = rawResponse.slice(3).join(' ').replace(/^:/, '').trim();
+					passedVars['message'] = message;
+					if(message != ''){
+						var nick = message.split('=')[0].trim();
+						var hostmask = message.split('=')[1].substr(1).trim();
+						passedVars['nick'] = nick;
+						passedVars['hostmask'] = hostmask;
+					}
+					break;
 				case 'MODE':
 					if(rawResponse[3]){
 						passedVars['mode'] = rawResponse[3];
@@ -196,6 +208,14 @@ IRC.prototype = {
 				self.fireEvent(event, passedVars);
 			}
 		}
+	},
+	request: function(command, params, catchCommand, hook){
+		catchCommand = catchCommand.toLowerCase();
+		if(this.hooks[catchCommand] == undefined){
+			this.hooks[catchCommand] = [];
+		}
+		this.hooks[catchCommand].push(hook);
+		this.send(command, params);
 	},
 	handlePing: function(data){
 		var server = data.split(':')[1].trim();
@@ -230,7 +250,17 @@ IRC.prototype = {
 				}
 			break;
 		}
+
+		// Plugin hooks
 		this.plugins.fire(event.toLowerCase(), passedVars);
+
+		// Request hooks
+		if(this.hooks[event.toLowerCase()] !== undefined){
+			for(f in this.hooks[event.toLowerCase()]){
+				this.hooks[event.toLowerCase()][f].apply(this, [passedVars]);
+			}
+			delete this.hooks[event.toLowerCase()];
+		}
 	},
 	disconnect: function(){
 		console.log('Disconnected from '+this.config.server);
