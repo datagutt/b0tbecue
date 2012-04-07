@@ -14,6 +14,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('mute', '[<user>]', 'Mutes user', USER_LEVEL_MOD, false, true);
 	bot.addCommand('unmute', '[<user>]', 'Unmutes user', USER_LEVEL_MOD, false, true);
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
+	bot.addCommand('invite', '<user> [<channel>]', 'Invites a user to a channel', USER_LEVEL_VOICE);
 	bot.addCommand('autoOP', '[on|off]', 'AutoOP on/off', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'join', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
@@ -117,6 +118,13 @@ exports.init = function(plugins, bot){
 					IRC.devoice(args.channel, args.arguments[0]);
 				}else{
 					IRC.devoice(args.channel, args.user);
+				}
+			break;
+			case 'invite':
+				if(args.arguments && args.arguments[0] && args.arguments[1]){
+					IRC.invite(args.arguments[1], args.arguments[0]);
+				}else if(args.arguments && args.arguments[0]){
+					IRC.invite(args.channel, args.arguments[0]);
 				}
 			break;
 			case 'autoOP':

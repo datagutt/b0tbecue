@@ -310,6 +310,9 @@ IRC.prototype = {
 	unmute: function(channel, user){
 		this.send('MODE',  channel + ' -q ' + user);
 	},
+	invite: function(channel, user){
+		this.send('INVITE', user + ' ' + channel);
+	},
 	message: function(target, message){
 		var self = this;
 		if(typeof message === 'string' && message.indexOf('\n') != -1){
