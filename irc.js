@@ -230,10 +230,14 @@ IRC.prototype = {
 				}
 			break;
 			case 'PART':
-				delete this.users[passedVars.channel][passedVars.user];	
+				if(this.users[passedVars.channel] && this.users[passedVars.channel][passedVars.user]){
+					delete this.users[passedVars.channel][passedVars.user]
+				}	
 			break;
 			case 'KICK':
-				delete this.users[passedVars.channel][passedVars.kicked];
+				if(this.users[passedVars.channel] && this.users[passedVars.channel][passedVars.kicked]){
+					delete this.users[passedVars.channel][passedVars.kicked];
+				}
 			break;
 			case 'NICK':
 				var self = this;
