@@ -1,4 +1,4 @@
-const DEFAULT_DOWNLOAD_LINK = 'http://get.cm';
+const DEFAULT_DOWNLOAD_LINK = 'http://miuiandroid.com/community/link-forums/roms.73/';
 var devices = {};
 // save this in db
 var version = '2.4.13';
