@@ -70,7 +70,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('removeDevice', '[<device>]', 'Removes device', USER_LEVEL_ADMIN);
 	bot.addCommand('updateVersion', '[<version>]', 'Updates version', USER_LEVEL_ADMIN);
 	// Devices
-		addDevice('google', 'Galaxy Nexus', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_GNEX-VERSION.zip');
+		addDevice('google', 'GalaxyNexus', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_GNEX-VERSION.zip');
 		addDevice('google', 'NexusS', 'GT-I9020', 'http://files.miuiandroid.com/VERSION/miuiandroid_NS-VERSION.zip');
 		addDevice('google', 'NexusOne', 'PB99100', 'http://files.miuiandroid.com/VERSION/miuiandroid_N1-VERSION.zip');
 		addDevice('samsung', 'GalaxyS2', 'GT-I9100', 'http://files.miuiandroid.com/VERSION/miuiandroid_SGS2-VERSION.zip');
