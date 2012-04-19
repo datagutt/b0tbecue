@@ -156,13 +156,16 @@ exports.init = function(plugins, bot){
 				}
 			break;
 			case 'forums':
-				IRC.sendMessage(args.channel, 'Forum: http://miuiandroid.com/community/forum/');
+				IRC.message(args.channel, 'Forum: http://miuiandroid.com/community/forum/');
 			break;
 			case 'stats':
-				IRC.sendMessage(args.channel, 'Stats: http:/stats.miuiandroid.com/');
+				IRC.message(args.channel, 'Stats: http:/stats.miuiandroid.com/');
 			break;
 			case 'logcat':
-				IRC.sendMessage(args.channel, 'Logcat: http://logcat.miuiandroid.com/');
+				IRC.message(args.channel, 'Logcat: http://logcat.miuiandroid.com/');
+			break;
+			case 'bugs':
+				IRC.message(args.channel, 'Bugs: http://miuiandroid.com/community/forums/bugs.20/');
 			break;
 		}
 	});
