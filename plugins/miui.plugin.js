@@ -64,6 +64,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('stats', 'Link to stats', '', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('forums', 'Link to forums', '', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('logcat', 'Link to logcat', '', USER_LEVEL_GLOBAL, undefined, true);
+        bot.addCommand('bugs', 'Link to bugs', '', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('addDevice', '[<device>]', 'Adds device', USER_LEVEL_ADMIN, undefined);
 	//bot.addCommand('changeDevice', '[<device>]', 'Changes device', USER_LEVEL_ADMIN);
 	bot.addCommand('removeDevice', '[<device>]', 'Removes device', USER_LEVEL_ADMIN);
