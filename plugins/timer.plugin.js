@@ -12,7 +12,7 @@ exports.init = function(plugins, bot){
 							var action = args.arguments[2];
 							var value = args.message.split(' ').slice(4);
 							args.command = action;
-							args.message = bot.config.prefix + args.command + ' ' + value;
+							args.message = bot.config.prefix + args.command + ' ' + value.join(' ');
 							args.arguments = value;
 							timers[i] = [];
 							timers[i].command = args.command;
@@ -34,7 +34,7 @@ exports.init = function(plugins, bot){
 						for(timer in timers){
 							var timer = timers[timer];
 							if(timer){
-								list += timer.number + '[' + timer.command + ' ' + timer.arguments.join(' ') + ']\n';
+								list += timer.number + '[' + timer.command + ' ' + (timer.arguments ? timer.arguments.join(' ') : '') + ']\n';
 							}
 						}
 						IRC.message(args.channel, list);
