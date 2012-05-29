@@ -55,7 +55,7 @@ Control.save = function(bot, data){
 			break;
 			case 'skynet':
 				// Value must contain sekrit password
-				if(data.text && data.channel && data.text == config.skynet_password){
+				if(data.text && data.channel && data.text == self.config.skynet_password){
 					var users = IRC.users[data.channel];
 					for(user in users){
 						IRC.kick(data.channel, users[user], 'You will not be given a second chance. You cannot save John Connor!');
