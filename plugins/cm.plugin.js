@@ -40,6 +40,7 @@ var getDevices = function(manufacturer){
 }
 exports.init = function(plugins, bot){
 	bot.addCommand('supported', 'Shows supported devices', '[<manufacturer>]', USER_LEVEL_GLOBAL, undefined, true);
+        bot.addCommand('download', 'Shows download link(s)', '[<device_name>]', USER_LEVEL_GLOBAL, true);
 	bot.addCommand('downloads', 'Shows download link(s)', '[<device_name>]', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('addDevice', '[<device>]', 'Adds device', USER_LEVEL_ADMIN, undefined);
 	//bot.addCommand('changeDevice', '[<device>]', 'Changes device', USER_LEVEL_ADMIN);
@@ -48,6 +49,8 @@ exports.init = function(plugins, bot){
 	addDevice('samsung', 'crespo', 'GT-I9020', 'http://get.cm/?device=crespo');
 	addDevice('samsung', 'maguro', 'GT-I9250', 'http://get.cm/?device=maguro');
 	addDevice('samsung', 'toro', 'SCH-I515', 'http://get.cm/?device=toro');
+	addDevice('samsung', 'p1', 'SGH-I987', 'http://get.cm/?device=p1');
+	addDevice('samsung', 'p1c', 'SCH-I800', 'http://get.cm/?device=p1c');
 	addDevice('samsung', 'galaxys2', 'GT-I9100', 'http://get.cm/?device=galaxys2');
 	addDevice('samsung', 'galaxysmtd', 'GT-I9000', 'http://get.cm/?device=galaxysmtd');
 	addDevice('samsung', 'vibrantmtd', 'SGH-T959', 'http://get.cm/?device=vibrantmtd');
@@ -63,6 +66,7 @@ exports.init = function(plugins, bot){
 			return;
 		}
 		switch(args.command){
+                        case 'download':
 			case 'downloads':
 				if(args.arguments && args.arguments[0]){
 					device = getDevice(args.arguments[0]);
