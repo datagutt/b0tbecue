@@ -2,6 +2,7 @@ var http = require('http');
 var config = {results: 1};
 var result = {};
 google = function(channel, keywords){
+	//keywords = 'site:miuiandroid.com ' + keywords;
 	var options = {
 		host: 'ajax.googleapis.com',
 		path: '/ajax/services/search/web?v=1.0&q=' + keywords
@@ -32,7 +33,7 @@ google = function(channel, keywords){
 	});
 }
 exports.init = function(plugins, bot){
-	bot.addCommand('google', '[<keywords>]', 'Google keyword', USER_LEVEL_GLOBAL);
+	bot.addCommand('google', '[<keywords>]', 'Google keyword', USER_LEVEL_GLOBAL, false, true);
 	plugins.listen(this, 'command', function(args){	
 		switch(args.command){
 			case 'google':
