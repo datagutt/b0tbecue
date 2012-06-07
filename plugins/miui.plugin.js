@@ -137,7 +137,7 @@ exports.init = function(plugins, bot){
 				IRC.message(args.channel, 'Forum: http://miuiandroid.com/community/forum/');
 			break;
 			case 'stats':
-				IRC.message(args.channel, 'Stats: http:/stats.miuiandroid.com/');
+				IRC.message(args.channel, 'Stats: http://stats.miuiandroid.com/');
 			break;
 			case 'logcat':
 				IRC.message(args.channel, 'Logcat: http://logcat.miuiandroid.com/');
