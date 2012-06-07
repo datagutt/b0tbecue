@@ -52,29 +52,9 @@ exports.init = function(plugins, bot){
 	//bot.addCommand('changeDevice', '[<device>]', 'Changes device', USER_LEVEL_ADMIN);
 	bot.addCommand('removeDevice', '[<device>]', 'Removes device', USER_LEVEL_ADMIN);
 	bot.addCommand('updateVersion', '[<version>]', 'Updates version', USER_LEVEL_ADMIN);
-	// Devices
-	/*
-	addDevice('google', 'GalaxyNexus', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_GNEX-VERSION.zip');
-	addDevice('google', 'NexusS', 'GT-I9020', 'http://files.miuiandroid.com/VERSION/miuiandroid_NS-VERSION.zip');
-	addDevice('google', 'NexusOne', 'PB99100', 'http://files.miuiandroid.com/VERSION/miuiandroid_N1-VERSION.zip');
-	addDevice('samsung', 'GalaxyS2', 'GT-I9100', 'http://files.miuiandroid.com/VERSION/miuiandroid_SGS2-VERSION.zip');
-	addDevice('samsung', 'Captivate', 'SGH-I897', 'http://files.miuiandroid.com/VERSION/miuiandroid_Captivate-VERSION.zip');
-	addDevice('samsung', 'GalaxyS', 'I9000', 'http://files.miuiandroid.com/VERSION/miuiandroid_i9100-VERSION.zip');
-	addDevice('motorola', 'Defy', '?', 'http://files.miuiandroid.com/VERSION/miuiandroid_Defy-VERSION.zip');
-	addDevice('motorola', 'Milestone', 'A853', 'http://files.miuiandroid.com/VERSION/miuiandroid_Milestone-VERSION.zip');
-	addDevice('htc', 'Sensation', 'Z710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_Sensation-VERSION.zip');
-	addDevice('htc', 'Desire', 'A8181', 'http://files.miuiandroid.com/VERSION/miuiandroid_Desire-VERSION.zip');
-	addDevice('htc', 'DesireZ', 'Saga', 'http://files.miuiandroid.com/VERSION/miuiandroid_DesireZ-VERSION.zip');
-	addDevice('htc', 'DesireS', 'A7272', 'http://files.miuiandroid.com/VERSION/miuiandroid_DesireS-VERSION.zip');
-	addDevice('htc', 'DesireHD', 'A9191', 'http://files.miuiandroid.com/VERSION/miuiandroid_DHD-VERSION.zip');
-	addDevice('htc', 'HD2', 'T8585', 'http://files.miuiandroid.com/VERSION/miuiandroid_HD2-VERSION.zip');
-	addDevice('htc', 'IncredibleS', 'S710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_IncredibleS-VERSION.zip');
-	addDevice('huawei', 'Honor', 'U8860', 'http://files.miuiandroid.com/VERSION/miuiandroid_Honor-VERSION.zip');
-	addDevice('xiaomi', 'MI-ONE', 'MI-ONE+', 'http://files.miuiandroid.com/VERSION/update.zip');
-	addDevice('lg', 'Optimus2x', 'P990', 'http://files.miuiandroid.com/VERSION/miuiandroid_Optimus2x-VERSION.zip');*/
-	// ICS
-	addDevice('google', 'GalaxyNexus (GSM)', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_maguro-VERSION.zip');
-	addDevice('google', 'GalaxyNexus (LTE)', 'toro', 'http://files.miuiandroid.com/VERSION/miuiandroid_toro-VERSION.zip');
+	// Devices (ICS)
+	addDevice('google', 'GalaxyNexus(GSM)', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_maguro-VERSION.zip');
+	addDevice('google', 'GalaxyNexus(LTE)', 'toro', 'http://files.miuiandroid.com/VERSION/miuiandroid_toro-VERSION.zip');
 	addDevice('google', 'NexusS', 'GT-I9020', 'http://files.miuiandroid.com/VERSION/miuiandroid_crespo-VERSION.zip');
 	addDevice('htc', 'OneX', 'endeavoru', 'http://files.miuiandroid.com/VERSION/miuiandroid_endeavoru-VERSION.zip');
 	addDevice('htc', 'Sensation', 'Z710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_pyramid-VERSION.zip');
