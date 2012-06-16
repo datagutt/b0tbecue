@@ -1,6 +1,6 @@
 var config = require('./configs/config.local.js').config;
 mongo = require('mongojs');
-var url = config.db.username + ':' + config.db.password + '@' + config.db.server + '/' + config.db.name;\
+var url = config.db.username + ':' + config.db.password + '@' + config.db.server + '/' + config.db.name;
 db = exports.db = mongo.connect(url, ['levels']);
 if(process.argv.length <= 3){
 	console.log('node install.js user host');

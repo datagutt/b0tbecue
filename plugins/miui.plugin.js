@@ -1,23 +1,7 @@
 const DEFAULT_DOWNLOAD_LINK = 'http://miuiandroid.com/community/link-forums/roms.73/';
 var devices = {};
 // save this in db
-var version = '2.4.13';
-function sortObject(o) {
-	var sorted = {},
-	key, a = [];
-
-	for (key in o) {
-		if (o.hasOwnProperty(key)) {
-			a.push(key);
-		}
-	}
-
-	a.sort();
-	for (key = 0; key < a.length; key++) {
-		sorted[a[key]] = o[a[key]];
-	}
-	return sorted;
-}
+var version = '2.6.1';
 var addDevice = function(manufacturer, name, model, download_link){
 	if(!download_link){
 		download_link = DEFAULT_DOWNLOAD_LINK;
@@ -29,13 +13,11 @@ var addDevice = function(manufacturer, name, model, download_link){
 	devices[manufacturer][name]['name'] = name;
 	devices[manufacturer][name]['model'] = model;
 	devices[manufacturer][name]['download_link'] = download_link;
-	devices = sortObject(devices);
 }
 var removeDevice = function(manufacturer, name){
 	if(devices[manufacturer] && devices[manufacturer][name]){
-		delete devices[manufacturer][name];
+		devices[manufacturer][name] = undefined;
 	}
-	devices = sortObject(devices);
 }
 var getDevice = function(name){
 	for(manufacturer in devices){
@@ -61,33 +43,27 @@ var getDevices = function(manufacturer){
 exports.init = function(plugins, bot){
 	bot.addCommand('supported', 'Shows supported devices', '[<manufacturer>]', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('downloads', 'Shows download link(s)', '[<device_name>]', USER_LEVEL_GLOBAL, undefined, true);
+	bot.addCommand('download', 'Shows download link(s)', '[<device_name>]', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('stats', 'Link to stats', '', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('forums', 'Link to forums', '', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('logcat', 'Link to logcat', '', USER_LEVEL_GLOBAL, undefined, true);
-        bot.addCommand('bugs', 'Link to bugs', '', USER_LEVEL_GLOBAL, undefined, true);
+    bot.addCommand('bugs', 'Link to bugs', '', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('addDevice', '[<device>]', 'Adds device', USER_LEVEL_ADMIN, undefined);
 	//bot.addCommand('changeDevice', '[<device>]', 'Changes device', USER_LEVEL_ADMIN);
 	bot.addCommand('removeDevice', '[<device>]', 'Removes device', USER_LEVEL_ADMIN);
 	bot.addCommand('updateVersion', '[<version>]', 'Updates version', USER_LEVEL_ADMIN);
-	// Devices
-		addDevice('google', 'GalaxyNexus', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_GNEX-VERSION.zip');
-		addDevice('google', 'NexusS', 'GT-I9020', 'http://files.miuiandroid.com/VERSION/miuiandroid_NS-VERSION.zip');
-		addDevice('google', 'NexusOne', 'PB99100', 'http://files.miuiandroid.com/VERSION/miuiandroid_N1-VERSION.zip');
-		addDevice('samsung', 'GalaxyS2', 'GT-I9100', 'http://files.miuiandroid.com/VERSION/miuiandroid_SGS2-VERSION.zip');
-		addDevice('samsung', 'Captivate', 'SGH-I897', 'http://files.miuiandroid.com/VERSION/miuiandroid_Captivate-VERSION.zip');
-		addDevice('samsung', 'GalaxyS', 'I9000', 'http://files.miuiandroid.com/VERSION/miuiandroid_i9100-VERSION.zip');
-		addDevice('motorola', 'Defy', '?', 'http://files.miuiandroid.com/VERSION/miuiandroid_Defy-VERSION.zip');
-		addDevice('motorola', 'Milestone', 'A853', 'http://files.miuiandroid.com/VERSION/miuiandroid_Milestone-VERSION.zip');
-		addDevice('htc', 'Sensation', 'Z710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_Sensation-VERSION.zip');
-		addDevice('htc', 'Desire', 'A8181', 'http://files.miuiandroid.com/VERSION/miuiandroid_Desire-VERSION.zip');
-		addDevice('htc', 'DesireZ', 'Saga', 'http://files.miuiandroid.com/VERSION/miuiandroid_DesireZ-VERSION.zip');
-		addDevice('htc', 'DesireS', 'A7272', 'http://files.miuiandroid.com/VERSION/miuiandroid_DesireS-VERSION.zip');
-		addDevice('htc', 'DesireHD', 'A9191', 'http://files.miuiandroid.com/VERSION/miuiandroid_DHD-VERSION.zip');
-		addDevice('htc', 'HD2', 'T8585', 'http://files.miuiandroid.com/VERSION/miuiandroid_HD2-VERSION.zip');
-		addDevice('htc', 'IncredibleS', 'S710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_IncredibleS-VERSION.zip');
-		addDevice('huawei', 'Honor', 'U8860', 'http://files.miuiandroid.com/VERSION/miuiandroid_Honor-VERSION.zip');
-		addDevice('xiaomi', 'MI-ONE', 'MI-ONE+', 'http://files.miuiandroid.com/VERSION/update.zip');
-		addDevice('lg', 'Optimus2x', 'P990', 'http://files.miuiandroid.com/VERSION/miuiandroid_Optimus2x-VERSION.zip');
+	// Devices (ICS)
+	addDevice('google', 'GalaxyNexus(GSM)', 'GT-I9250', 'http://files.miuiandroid.com/VERSION/miuiandroid_maguro-VERSION.zip');
+	addDevice('google', 'GalaxyNexus(LTE)', 'toro', 'http://files.miuiandroid.com/VERSION/miuiandroid_toro-VERSION.zip');
+	addDevice('google', 'NexusS', 'GT-I9020', 'http://files.miuiandroid.com/VERSION/miuiandroid_crespo-VERSION.zip');
+	addDevice('htc', 'OneX', 'endeavoru', 'http://files.miuiandroid.com/VERSION/miuiandroid_endeavoru-VERSION.zip');
+	addDevice('htc', 'Sensation', 'Z710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_pyramid-VERSION.zip');
+	addDevice('samsung', 'GalaxyS2', 'GT-I9100', 'http://files.miuiandroid.com/VERSION/miuiandroid_SGS2-VERSION.zip');
+	addDevice('huawei', 'Honor', 'U8860', 'http://files.miuiandroid.com/VERSION/miuiandroid_hwu8860-VERSION.zip');
+	addDevice('huawei', 'AscendP1', 'U9200', 'http://files.miuiandroid.com/VERSION/miuiandroid_hwu9200-VERSION.zip');
+	addDevice('sony', 'ArcS', 'LT18i', 'http://files.miuiandroid.com/VERSION/miuiandroid_LT18i-VERSION.zip');
+	addDevice('xiaomi', 'MI-ONE', 'MI-ONE+', 'http://files.miuiandroid.com/VERSION/update.zip');
+	
 	plugins.listen(this, 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, level)){
@@ -95,6 +71,7 @@ exports.init = function(plugins, bot){
 		}
 		switch(args.command){
 			case 'downloads':
+			case 'download':
 				if(args.arguments && args.arguments[0]){
 					device = getDevice(args.arguments[0]);
 					if(typeof device == 'object'){
@@ -160,7 +137,7 @@ exports.init = function(plugins, bot){
 				IRC.message(args.channel, 'Forum: http://miuiandroid.com/community/forum/');
 			break;
 			case 'stats':
-				IRC.message(args.channel, 'Stats: http:/stats.miuiandroid.com/');
+				IRC.message(args.channel, 'Stats: http://stats.miuiandroid.com/');
 			break;
 			case 'logcat':
 				IRC.message(args.channel, 'Logcat: http://logcat.miuiandroid.com/');
