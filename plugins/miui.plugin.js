@@ -1,7 +1,7 @@
 const DEFAULT_DOWNLOAD_LINK = 'http://miuiandroid.com/community/link-forums/roms.73/';
 var devices = {};
 // save this in db
-var version = '2.6.1';
+var version = '2.6.22';
 var addDevice = function(manufacturer, name, model, download_link){
 	if(!download_link){
 		download_link = DEFAULT_DOWNLOAD_LINK;
@@ -16,7 +16,7 @@ var addDevice = function(manufacturer, name, model, download_link){
 }
 var removeDevice = function(manufacturer, name){
 	if(devices[manufacturer] && devices[manufacturer][name]){
-		devices[manufacturer][name] = undefined;
+		delete devices[manufacturer][name];
 	}
 }
 var getDevice = function(name){
@@ -57,13 +57,15 @@ exports.init = function(plugins, bot){
 	addDevice('google', 'GalaxyNexus(LTE)', 'toro', 'http://files.miuiandroid.com/VERSION/miuiandroid_toro-VERSION.zip');
 	addDevice('google', 'NexusS', 'GT-I9020', 'http://files.miuiandroid.com/VERSION/miuiandroid_crespo-VERSION.zip');
 	addDevice('htc', 'OneX', 'endeavoru', 'http://files.miuiandroid.com/VERSION/miuiandroid_endeavoru-VERSION.zip');
+	addDevice('htc', 'OneS', 'ville', 'http://files.miuiandroid.com/VERSION/miuiandroid_ville-VERSION.zip');
 	addDevice('htc', 'Sensation', 'Z710e', 'http://files.miuiandroid.com/VERSION/miuiandroid_pyramid-VERSION.zip');
 	addDevice('samsung', 'GalaxyS2', 'GT-I9100', 'http://files.miuiandroid.com/VERSION/miuiandroid_SGS2-VERSION.zip');
 	addDevice('huawei', 'Honor', 'U8860', 'http://files.miuiandroid.com/VERSION/miuiandroid_hwu8860-VERSION.zip');
 	addDevice('huawei', 'AscendP1', 'U9200', 'http://files.miuiandroid.com/VERSION/miuiandroid_hwu9200-VERSION.zip');
 	addDevice('sony', 'ArcS', 'LT18i', 'http://files.miuiandroid.com/VERSION/miuiandroid_LT18i-VERSION.zip');
 	addDevice('xiaomi', 'MI-ONE', 'MI-ONE+', 'http://files.miuiandroid.com/VERSION/update.zip');
-	
+	addDevice('motorola', 'XT910', 'XT910', 'http://files.miuiandroid.com/VERSION/miuiandroid_umts_spyder-VERSION.zip');	
+
 	plugins.listen(this, 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, level)){
