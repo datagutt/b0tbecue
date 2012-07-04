@@ -327,6 +327,9 @@ IRC.prototype = {
 		}else{
 			this.send('PRIVMSG', target + ' :' + message);
 		}
+	},
+	notice: function(target, message){
+		this.send('NOTICE', target + ' :' + message);
 	}
 };
 exports.IRC = IRC;

@@ -77,7 +77,7 @@ exports.init = function(plugins, bot){
 			case 'eval':
 				code = args.arguments.join(' ');
 				evaluated = evaluate.apply(this, [code, args.channel]);
-				result = evaluated ? util.inspect(evaluated) : false;
+				result = util.inspect(evaluated);
 				if(result){
 					IRC.message(args.channel, result);
 				}

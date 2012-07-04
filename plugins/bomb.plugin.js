@@ -12,7 +12,7 @@ var color;
 
 var explode = function(){
 	IRC.message(channel, 'BOOM!');
-	IRC.kick(channel, challenged, 'You failed to disarm the bomb! Correct color was ' + color);
+	IRC.kick(channel, challenged, 'You failed to disarm the bomb! Correct wire was ' + color);
 	challenged = '';
 	channel = '';
 	clearInterval(countdown);
@@ -59,10 +59,10 @@ exports.init = function(plugins, bot){
 	plugins.listen(this, 'message', function(args){
 		if(args.user == challenged){
 			if(args.message == color || (args.message == '42' && bot.getUserLevel(args.user, args.host) >= USER_LEVEL_MOD)){
-				IRC.message(channel, 'Correct color!');
+				IRC.message(channel, 'Correct wire!');
 				disarm();
 			}else{
-				IRC.message(channel, 'Wrong color!');
+				IRC.message(channel, 'Wrong wire!');
 				explode();
 			}
 		}

@@ -42,6 +42,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('supported', 'Shows supported devices', '[<manufacturer>]', USER_LEVEL_GLOBAL, undefined, true);
         bot.addCommand('download', 'Shows download link(s)', '[<device_name>]', USER_LEVEL_GLOBAL, true);
 	bot.addCommand('downloads', 'Shows download link(s)', '[<device_name>]', USER_LEVEL_GLOBAL, undefined, true);
+	bot.addCommand('changelog', 'Shows the cm changelog', '[<device_name>]', USER_LEVEL_GLOBAL, undefined, true);
 	bot.addCommand('addDevice', '[<device>]', 'Adds device', USER_LEVEL_ADMIN, undefined);
 	//bot.addCommand('changeDevice', '[<device>]', 'Changes device', USER_LEVEL_ADMIN);
 	bot.addCommand('removeDevice', '[<device>]', 'Removes device', USER_LEVEL_ADMIN);
@@ -60,6 +61,26 @@ exports.init = function(plugins, bot){
 	addDevice('samsung', 'mesmerizemtd', 'SCH-I500', 'http://get.cm/?device=mesmerizemtd');
 	addDevice('samsung', 'showcasemtd', 'SCH-I500', 'http://get.cm/?device=showcasemtd');
 	addDevice('samsung', 'i777', 'SGH-I777', 'http://get.cm/?device=i777');
+	addDevice('samsung', 'i9300', 'GT-I9300', 'http://get.cm/?device=i9300');
+	addDevice('asus', 'tf300t', 'TF300T', 'http://get.cm/?device=tf300t');
+
+        var count = 0;
+	plugins.listen(this, 'join', function(args){
+                // Send a notice to users with webchat to change their nickname
+		if (args.user.indexOf("qwebirc") == 0) {
+			IRC.notice(args.user, 'Please choose a proper nickname with "/nick nickname"');
+		}
+	});
+	plugins.listen(this, 'message', function(args){
+		if(args.message.indexOf("?") != -1){
+			count++;
+		}
+		if (count >= 7) {
+			IRC.message(args.channel, "derp");
+			count = 0;
+		}
+	});
+
 	plugins.listen(this, 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, level)){
@@ -94,6 +115,13 @@ exports.init = function(plugins, bot){
 				}else{
 					IRC.message(args.channel, 'That manufacturer is not supported!');
 				}
+			break;
+			case 'changelog':
+				var url = '';
+				if(args.arguments && args.arguments[0]){
+					url = "#" + args.arguments[0] + "/cm9/next";
+				}
+				IRC.message(args.channel, 'http://changelog.bbqdroid.org/' + url);
 			break;
 			case 'addDevice':
 				if(args.arguments && args.arguments[0] && args.arguments[1] && args.arguments[2]){

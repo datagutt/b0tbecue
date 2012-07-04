@@ -3,7 +3,7 @@ var http = require('http'), fs = require('fs');
 var Control = function(){
 
 };
-Control.save = function(bot, data){
+Control.save = function(self, bot, data){
 	if(data && data.action){
 		switch(data.action){
 			case 'stop':
@@ -125,7 +125,7 @@ Control.start = function(self, bot){
 			var data = JSON.parse(message.utf8Data);
 			if (message.type === 'utf8') {
 				if(data.controlpw && data.controlpw == self.config.password){
-					Control.save(bot, data);
+					Control.save(self, bot, data);
 				}else{
 					connection.send('wrongpw');
 				}
