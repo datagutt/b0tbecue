@@ -9,6 +9,7 @@ var countdown;
 var challenged = '';
 var channel = '';
 var color;
+var isNuclear = 0;
 
 var explode = function(isNuclear){
 	IRC.message(channel, 'BOOM!');
@@ -18,6 +19,7 @@ var explode = function(isNuclear){
 	IRC.kick(channel, challenged, 'You failed to disarm the bomb! Correct wire was ' + color);
 	challenged = '';
 	channel = '';
+	isNuclear = 0;
 	clearInterval(countdown);
 }
 
@@ -25,6 +27,7 @@ var disarm = function(){
 	IRC.message(channel, 'Bomb disarmed!');
 	challenged = '';
 	channel = '';
+	isNuclear = 0;
 	clearInterval(countdown);
 }
 
@@ -44,13 +47,13 @@ exports.init = function(plugins, bot){
 						IRC.message(args.channel, args.user + ': bomb already in progress');
 						return;
 					}
+					isNuclear = (args.command == 'nuclearbomb');
 					challenged = args.arguments[0];
 					channel = args.channel;
 					color = colors[Math.floor(Math.random()*(colors.length-1))];
 					IRC.message(args.channel, challenged + ', you have been challenged!');
 					IRC.message(args.channel, 'Answer (' + colors.join(', ') + ') before time runs out!');
 					var timer = 10;
-					var isNuclear = (args.command == 'nuclearbomb');
 					countdown = setInterval(function(){
 						IRC.message(args.channel, timer);
 						timer--;
@@ -63,7 +66,6 @@ exports.init = function(plugins, bot){
 		}
 	});
 	plugins.listen(this, 'message', function(args){
-		var isNuclear = (args.command == 'nuclearbomb');
 		if(args.user == challenged){
 			if(args.message == color || (args.message == '42' && bot.getUserLevel(args.user, args.host) >= USER_LEVEL_MOD)){
 				IRC.message(channel, 'Correct wire!');
