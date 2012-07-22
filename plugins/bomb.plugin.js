@@ -10,8 +10,11 @@ var challenged = '';
 var channel = '';
 var color;
 
-var explode = function(){
+var explode = function(isNuclear){
 	IRC.message(channel, 'BOOM!');
+	if(isNuclear){
+		IRC.ban(channel, challenged);
+	}
 	IRC.kick(channel, challenged, 'You failed to disarm the bomb! Correct wire was ' + color);
 	challenged = '';
 	channel = '';
@@ -27,6 +30,7 @@ var disarm = function(){
 
 exports.init = function(plugins, bot){
 	bot.addCommand('bomb', '<user>', 'Bombs a user', USER_LEVEL_ADMIN);
+	bot.addCommand('nuclearbomb', '<user>', 'Bombs a user', USER_LEVEL_ADMIN);
 	plugins.listen(this, 'command', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
 		if(!bot.isCommand(args.command, level)){
@@ -34,6 +38,7 @@ exports.init = function(plugins, bot){
 		}
 		switch(args.command){
 			case 'bomb':
+			case 'nuclearbomb':
 				if(args.arguments && args.arguments[0]){
 					if(challenged != ''){
 						IRC.message(args.channel, args.user + ': bomb already in progress');
@@ -45,11 +50,12 @@ exports.init = function(plugins, bot){
 					IRC.message(args.channel, challenged + ', you have been challenged!');
 					IRC.message(args.channel, 'Answer (' + colors.join(', ') + ') before time runs out!');
 					var timer = 10;
+					var isNuclear = (args.command == 'nuclearbomb');
 					countdown = setInterval(function(){
 						IRC.message(args.channel, timer);
 						timer--;
 						if(timer < 0){
-							explode();
+							explode(isNuclear);
 						}
 					}, 1000);
 				}
@@ -57,13 +63,14 @@ exports.init = function(plugins, bot){
 		}
 	});
 	plugins.listen(this, 'message', function(args){
+		var isNuclear = (args.command == 'nuclearbomb');
 		if(args.user == challenged){
 			if(args.message == color || (args.message == '42' && bot.getUserLevel(args.user, args.host) >= USER_LEVEL_MOD)){
 				IRC.message(channel, 'Correct wire!');
 				disarm();
 			}else{
 				IRC.message(channel, 'Wrong wire!');
-				explode();
+				explode(isNuclear);
 			}
 		}
 	});
