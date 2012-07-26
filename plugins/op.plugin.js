@@ -4,15 +4,15 @@ exports.init = function(plugins, bot){
 	bot.addCommand('say', '[<channel>] [<message>]', 'Says message to channel', USER_LEVEL_ADMIN);
 	bot.addCommand('join', '[<channel>]', 'Joins channel', USER_LEVEL_ADMIN, false, true);
 	bot.addCommand('part', '[<channel>]', 'Parts channel', USER_LEVEL_ADMIN, false, true);
-	bot.addCommand('kick', '[<user>] [<message>]', 'Kicks user from channel', USER_LEVEL_MOD, false, true);
-	bot.addCommand('kickban', '[<user>] [<message>]', 'Kick and bans user from channel', USER_LEVEL_MOD, false, true);
-	bot.addCommand('unban', '[<user>]', 'Unbans user', USER_LEVEL_ADMIN, false, true);
-	bot.addCommand('op', '[<user>]', 'Gives operator status to user', USER_LEVEL_MOD, false, true);
-	bot.addCommand('deop', '[<user>]', 'Remove operator status from user', USER_LEVEL_MOD, false, true);
-	bot.addCommand('voice', '[<user>]', 'Gives voice status to user', USER_LEVEL_MOD, false, true);
-	bot.addCommand('devoice', '[<user>]', 'Remove voice status from user', USER_LEVEL_MOD, false, true);
-	bot.addCommand('mute', '[<user>]', 'Mutes user', USER_LEVEL_MOD, false, true);
-	bot.addCommand('unmute', '[<user>]', 'Unmutes user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('kick', '[<user>] [<channel>]', 'Kicks user from channel', USER_LEVEL_MOD, false, true);
+	bot.addCommand('kickban', '[<user>] [<channel>]', 'Kick and bans user from channel', USER_LEVEL_MOD, false, true);
+	bot.addCommand('unban', '[<user>] [<channel>]', 'Unbans user', USER_LEVEL_ADMIN, false, true);
+	bot.addCommand('op', '[<user>] [<channel>]', 'Gives operator status to user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('deop', '[<user>] [<channel>]', 'Remove operator status from user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('voice', '[<user>] [<channel>]', 'Gives voice status to user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('devoice', '[<user>] [<channel>]', 'Remove voice status from user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('mute', '[<user>] [<channel>]', 'Mutes user', USER_LEVEL_MOD, false, true);
+	bot.addCommand('unmute', '[<user>] [<channel>]', 'Unmutes user', USER_LEVEL_MOD, false, true);
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
 	bot.addCommand('invite', '<user> [<channel>]', 'Invites a user to a channel', USER_LEVEL_VOICE);
 	bot.addCommand('autoOP', '[on|off]', 'AutoOP on/off', USER_LEVEL_OWNER);
@@ -66,21 +66,21 @@ exports.init = function(plugins, bot){
 			break;
 			case 'unban':
 				if(args.arguments && args.arguments[0]){
-					IRC.unban(args.channel, args.arguments[0]);
+					IRC.unban(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.unban(args.channel, args.user);
 				}
 			break;
 			case 'op':
 				if(args.arguments && args.arguments[0]){
-					IRC.op(args.channel, args.arguments[0]);
+					IRC.op(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.op(args.channel, args.user);
 				}
 			break;
 			case 'deop':
 				if(args.arguments && args.arguments[0]){
-					IRC.deop(args.channel, args.arguments[0]);
+					IRC.deop(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.op(args.channel, args.user);
 				}
@@ -94,37 +94,35 @@ exports.init = function(plugins, bot){
 			break;
 			case 'mute':
 				if(args.arguments && args.arguments[0]){
-					IRC.mute(args.channel, args.arguments[0]);
+					IRC.mute(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.mute(args.channel, args.user);
 				}
 			break;
 			case 'unmute':
 				if(args.arguments && args.arguments[0]){
-					IRC.unmute(args.channel, args.arguments[0]);
+					IRC.unmute(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.unmute(args.channel, args.user);
 				}
 			break;
 			case 'voice':
 				if(args.arguments && args.arguments[0]){
-					IRC.voice(args.channel, args.arguments[0]);
+					IRC.voice(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.voice(args.channel, args.user);
 				}
 			break;
 			case 'devoice':
 				if(args.arguments && args.arguments[0]){
-					IRC.devoice(args.channel, args.arguments[0]);
+					IRC.devoice(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}else{
 					IRC.devoice(args.channel, args.user);
 				}
 			break;
 			case 'invite':
-				if(args.arguments && args.arguments[0] && args.arguments[1]){
-					IRC.invite(args.arguments[1], args.arguments[0]);
-				}else if(args.arguments && args.arguments[0]){
-					IRC.invite(args.channel, args.arguments[0]);
+				if(args.arguments && args.arguments[0]){
+					IRC.invite(!args.arguments[1] ? args.channel : args.arguments[1], args.arguments[0]);
 				}
 			break;
 			case 'autoOP':

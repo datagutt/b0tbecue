@@ -29,4 +29,15 @@ exports.init = function(plugins, bot){
 			break;
 		}
 	});
+	plugins.listen(this, 'message', function(args){
+		var bitlyPattern = new RegExp("http://bit.ly/([a-zA-Z0-9]{1,7})", "")
+		var location = args.message.match(bitlyPattern);
+		if (location != null) {
+			bitly.expand(location[0], function(err, response){
+				if(!err && response.data.expand[0].long_url){
+					IRC.message(args.channel, args.user + ': ' + location[0] + ': ' + response.data.expand[0].long_url);
+				}
+			});
+		}
+	});
 }

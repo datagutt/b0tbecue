@@ -41,6 +41,18 @@ var Bot = function(config){
 	this.commands = {};
 	IRC.config = config.irc;
 	Plugins.load(config.bot.plugins);
+
+	// Command line interface
+	process.stdin.resume();
+	process.stdin.setEncoding('utf8');
+
+	process.stdin.on('data', function (text) {
+		try {
+			console.log(eval(text));
+		} catch (e) {
+			console.log(e);
+		}
+	});
 };
 Bot.prototype = {
 	addCommand: function(name, usage, description, level, hidden, main){

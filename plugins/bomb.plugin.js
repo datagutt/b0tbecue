@@ -9,9 +9,9 @@ var countdown;
 var challenged = '';
 var channel = '';
 var color;
-var isNuclear = 0;
+var isNuclear = false;
 
-var explode = function(isNuclear){
+var explode = function(){
 	IRC.message(channel, 'BOOM!');
 	if(isNuclear){
 		IRC.ban(channel, challenged);
@@ -19,7 +19,7 @@ var explode = function(isNuclear){
 	IRC.kick(channel, challenged, 'You failed to disarm the bomb! Correct wire was ' + color);
 	challenged = '';
 	channel = '';
-	isNuclear = 0;
+	isNuclear = false;
 	clearInterval(countdown);
 }
 
@@ -27,7 +27,7 @@ var disarm = function(){
 	IRC.message(channel, 'Bomb disarmed!');
 	challenged = '';
 	channel = '';
-	isNuclear = 0;
+	isNuclear = false;
 	clearInterval(countdown);
 }
 
@@ -58,7 +58,7 @@ exports.init = function(plugins, bot){
 						IRC.message(args.channel, timer);
 						timer--;
 						if(timer < 0){
-							explode(isNuclear);
+							explode();
 						}
 					}, 1000);
 				}
