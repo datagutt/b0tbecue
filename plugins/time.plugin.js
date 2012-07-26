@@ -11,7 +11,7 @@ exports.init = function(plugins, bot){
 				try{
 					currentTime.setTimezone(country + '/' + city);
 				}catch(e){
-					IRC.message(args.channel, args.user + ': Either you used an invalid country or city or you live in the middle of nowhere.').
+					IRC.message(args.channel, args.user + ': Either you used an invalid country or city or you live in the middle of nowhere.');
 					return;
 				}
 	
