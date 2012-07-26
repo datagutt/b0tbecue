@@ -1,15 +1,19 @@
 var time = require('time');
 exports.init = function(plugins, bot){
-	bot.addCommand('time', '[<country> <city>]', 'Show time in location', USER_LEVEL_GLOBAL, true);
+	bot.addCommand('time', '[<country> <city>', 'Show time in location', USER_LEVEL_GLOBAL, true);
 	plugins.listen(this, 'command', function(args){
 		var currentTime = new time.Date();
 		if(args.command == 'time'){
-			if (args.arguments && args.arguments[0] && args.arguments[1]) {
+			if (args.arguments && args.arguments[0]) {
 				var country = args.arguments[0];
 				var city = args.arguments[1];
 				
 				try{
-					currentTime.setTimezone(country + '/' + city);
+					if(args.arguments[1]){
+						currentTime.setTimezone(country + '/' + city);
+					}else{
+						currentTime.setTimezone(country);
+					}
 				}catch(e){
 					IRC.message(args.channel, args.user + ': Either you used an invalid country or city or you live in the middle of nowhere.');
 					return;
