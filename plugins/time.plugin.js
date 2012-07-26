@@ -8,7 +8,12 @@ exports.init = function(plugins, bot){
 				var country = args.arguments[0];
 				var city = args.arguments[1];
 				
-				currentTime.setTimezone(country + '/' + city);
+				try{
+					currentTime.setTimezone(country + '/' + city);
+				}catch(e){
+					IRC.message(args.channel, args.user + ': Either you used an invalid country or city or you live in the middle of nowhere.').
+					return;
+				}
 	
 				var hours = currentTime.getHours();
 				var minutes = currentTime.getMinutes();
