@@ -7,15 +7,34 @@ var Plugins = function(bot){
 Plugins.prototype = {
 	load: function(plugins){
 		for(plugin in plugins){
-			var tempPlugin = require('./plugins/'+plugin);
-			if(typeof tempPlugin == 'object'){
-				if(plugins[plugin]){
-					tempPlugin.name = plugin;
-					tempPlugin.config = plugins[plugin];
-				}
-				tempPlugin.init(this, this.bot);
-			}
-			this.plugins[plugin] = tempPlugin;
+			var p = {};
+			p.name = plugin;
+			p.config = plugins[plugin];
+			this.loadPlugin(p, plugins);
+		}
+	},
+	loadPlugin: function(plugin){
+		if(!plugin){
+			return;
+		}
+		var tempPlugin = require('./plugins/'+plugin.name);
+		if(typeof tempPlugin == 'object'){
+			tempPlugin.name = plugin.name;
+			tempPlugin.config = plugin.config;
+			tempPlugin.init(this, this.bot);
+		}
+		this.plugins[plugin] = tempPlugin;
+	},
+	reloadPlugin: function(plugin){
+		// This is just another way to call loadPlugin
+		if(plugin && this.plugins[plugin]){
+			this.loadPlugin({name: plugin});
+		}
+	},
+	unloadPlugin: function(plugin){
+		if(plugin && this.plugins[plugin]){
+			delete this.hooks[plugin];
+			delete this.plugins[plugin];
 		}
 	},
 	isPluginFunction: function(plugin, func){
