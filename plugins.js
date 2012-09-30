@@ -10,7 +10,7 @@ Plugins.prototype = {
 			var p = {};
 			p.name = plugin;
 			p.config = plugins[plugin];
-			this.loadPlugin(p, plugins);
+			this.loadPlugin(p);
 		}
 	},
 	loadPlugin: function(plugin){

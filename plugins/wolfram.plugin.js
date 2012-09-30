@@ -1,5 +1,5 @@
 exports.init = function(plugins, bot){
-	bot.addCommand('wolfram', '[<id>]', 'Gets random bash quote or by id', USER_LEVEL_GLOBAL);
+	bot.addCommand('wolfram', '<question>', 'Answer question using wolfram alpha', USER_LEVEL_GLOBAL);
 	console.log(this);
 	if(this.config.client){
 		var wolfram = require('wolfram').createClient(this.config.client);
