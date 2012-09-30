@@ -64,9 +64,9 @@ exports.init = function(plugins, bot){
 	addDevice('samsung', 'i9300', 'GT-I9300', 'http://get.cm/?device=i9300');
 	addDevice('asus', 'tf300t', 'TF300T', 'http://get.cm/?device=tf300t');
 
-        var count = 0;
+	var count = 0;
 	plugins.listen(this, 'join', function(args){
-                // Send a notice to users with webchat to change their nickname
+		// Send a notice to users with webchat to change their nickname
 		if (args.user.indexOf("qwebirc") == 0) {
 			IRC.notice(args.user, 'Please choose a proper nickname with "/nick nickname"');
 		}
@@ -87,7 +87,7 @@ exports.init = function(plugins, bot){
 			return;
 		}
 		switch(args.command){
-                        case 'download':
+			case 'download':
 			case 'downloads':
 				if(args.arguments && args.arguments[0]){
 					device = getDevice(args.arguments[0]);
@@ -119,7 +119,7 @@ exports.init = function(plugins, bot){
 			case 'changelog':
 				var url = '';
 				if(args.arguments && args.arguments[0]){
-					url = "#" + args.arguments[0] + "/cm9/next";
+					url = "#" + args.arguments[0] + "/cm10/next";
 				}
 				IRC.message(args.channel, 'http://changelog.bbqdroid.org/' + url);
 			break;
