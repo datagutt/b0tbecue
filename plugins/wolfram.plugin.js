@@ -1,6 +1,5 @@
 exports.init = function(plugins, bot){
 	bot.addCommand('wolfram', '<question>', 'Answer question using wolfram alpha', USER_LEVEL_GLOBAL);
-	console.log(this);
 	if(this.config.client){
 		var wolfram = require('wolfram').createClient(this.config.client);
 	}else{
