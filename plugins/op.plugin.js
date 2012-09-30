@@ -14,7 +14,7 @@ exports.init = function(plugins, bot){
 	bot.addCommand('mute', '[<user>] [<channel>]', 'Mutes user', USER_LEVEL_MOD, false, true);
 	bot.addCommand('unmute', '[<user>] [<channel>]', 'Unmutes user', USER_LEVEL_MOD, false, true);
 	bot.addCommand('topic', '[<topic>]', 'Sets the topic of current channel', USER_LEVEL_MOD);
-	bot.addCommand('invite', '<user> [<channel>]', 'Invites a user to a channel', USER_LEVEL_VOICE);
+	bot.addCommand('invite', '<user> [<channel>]', 'Invites a user to a channel', USER_LEVEL_MOD);
 	bot.addCommand('autoOP', '[on|off]', 'AutoOP on/off', USER_LEVEL_OWNER);
 	plugins.listen('OP', 'join', function(args){
 		var level = bot.getUserLevel(args.user, args.host);
