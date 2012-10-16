@@ -1,7 +1,7 @@
 var fx = require('money');
 var http = require('http');
-var getRates = function(callback){
-	var options = {host: 'openexchangerates.org', path: '/latest.json'}, quote;
+var getRates = function(key, callback){
+	var options = {host: 'openexchangerates.org', path: '/latest.json?api_id=' + key}, quote;
 	http.get(options, function(res) {
 		var data = '';
 		res.on('data', function (chunk){
@@ -28,7 +28,7 @@ exports.init = function(plugins, bot){
 					var from = args.arguments[1].toUpperCase();
 					var to = args.arguments[2].toUpperCase();
 					var response;
-					getRates(function(data){
+					getRates(this.config.key, function(data){
 						fx.rates = data.rates;
 						try{
 							var response = fx.convert(value, {'from': from, 'to': to});
